@@ -47,3 +47,6 @@ TagManager:
   - name: Parallax Layer
     uniqueID: 4158215647
     locked: 0
+  - name: Level Layer
+    uniqueID: 2721997511
+    locked: 0
