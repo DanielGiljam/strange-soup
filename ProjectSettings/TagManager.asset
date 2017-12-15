@@ -50,3 +50,6 @@ TagManager:
   - name: Level Layer
     uniqueID: 2721997511
     locked: 0
+  - name: Object Layer
+    uniqueID: 610613233
+    locked: 0
