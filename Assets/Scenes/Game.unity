@@ -445,7 +445,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.78125
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -484,7 +484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d50742538cd7694faa725e4fc23a235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EmulatedResolution: {x: 17, y: 10}
 --- !u!1 &2048636502
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +519,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a66f48163408d46e89a995d0166b0037, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -607,7 +606,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2048636502}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: a66f48163408d46e89a995d0166b0037, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -635,7 +634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcdd4403e32dc44429aada1a5655e2a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementMultiplier: 10
+  MovementSpeed: 5
+  SprintMultiplier: 2
+  JumpHeight: 5
 --- !u!1 &2097217192
 GameObject:
   m_ObjectHideFlags: 0

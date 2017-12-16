@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +6,27 @@ using UnityEngine;
 public class ResponsiveCamera : MonoBehaviour
 {
 
-    public Vector2 EmulatedResolution = new Vector2(17, 10);
+    Vector2 emulatedResolution = new Vector2(17, 10);
+    Vector2 screenAspectRatio;
+    Camera cam;
+    float emuResFloat;
+    float screenARFloat;
 	
 	void Awake ()
 	{
-        Camera cam  = GetComponent<Camera>();
-        float screenAspectRatio = (float) Screen.width / Screen.height;
-        Debug.Log("Screeen width: " + Screen.width);
-        Debug.Log("Screeen height: " + Screen.height);
-        Debug.Log("Screen aspect ratio --> " + screenAspectRatio);
-        Debug.Log("True 16:9 --> " + 16.0f / 9.0f);
-
-        if (Mathf.Ceil(screenAspectRatio * 100) > 177)
+        cam  = GetComponent<Camera>();
+        screenAspectRatio = new Vector2(Screen.width, Screen.height);
+        emuResFloat = emulatedResolution.x / emulatedResolution.y;
+        screenARFloat = screenAspectRatio.x / screenAspectRatio.y;
+        if (screenARFloat > emuResFloat)
         {
-            cam.orthographicSize = (EmulatedResolution.x / (16.0f / 9.0f)) / 2;
+            cam.orthographicSize = (emulatedResolution.x / screenARFloat) / 2;
         }
 	    else
 	    {
-	        cam.orthographicSize = EmulatedResolution.y / 2;
+	        cam.orthographicSize = emulatedResolution.y / 2;
         }
+        Debug.Log("Screen width: " + Screen.width + ", Screen height: " + Screen.height + "\nScreen aspect ratio: " + screenARFloat + ", Emulated resolution aspect ratio: " + emuResFloat);
 	}
 
 }

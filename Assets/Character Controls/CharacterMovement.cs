@@ -1,29 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour {
+namespace Assets.Character_Controls
+{
+    public class CharacterMovement : MonoBehaviour {
 
-    public float movementMultiplier = 5;
+        public float MovementSpeed = 5;
+        public float SprintMultiplier = 2;
+        public float JumpHeight = 5;
 
-    Rigidbody2D rb;
-    float hInputValue;
-    float hVel;
-    float vVel;
+        private Rigidbody2D _rb;
+        private BoxCollider2D _bc;
+        private float _hInputValue;
+        private float _jumpInputValue;
+        private float _hVel;
+        private float _vVel;
 
-	// Use this for initialization
-	void Awake ()
-    {
-        rb = GetComponent<Rigidbody2D>();
-	}
+        // Use this for initialization
+        private void Awake ()
+        {
+            _rb = GetComponent<Rigidbody2D>();
+            _bc = GetComponent<BoxCollider2D>();
+        }
 	
-	// Update is called once per frame
-	void FixedUpdate ()
-    {
-        hInputValue = Input.GetAxis("Horizontal");
-        hVel = hInputValue * movementMultiplier;
-        vVel = rb.velocity.y;
-        rb.velocity = new Vector2(hVel, vVel);
-	}
+        // Update is called once per frame
+        private void FixedUpdate ()
+        {
+            _hInputValue = Input.GetAxis("Horizontal");
+            _hVel = _hInputValue * MovementSpeed;
+            _vVel = _rb.velocity.y;
+            _rb.velocity = new Vector2(_hVel, _vVel);
+            _jumpInputValue = Input.GetAxis("Jump");
+            _rb.AddForce(new Vector2(0, _jumpInputValue * JumpHeight));
+        }
 
+    }
 }

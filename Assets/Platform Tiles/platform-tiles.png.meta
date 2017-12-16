@@ -1,53 +1,53 @@
 fileFormatVersion: 2
 guid: d7944a2b20ccc6a4e833496aeaddfaaf
-timeCreated: 1513284647
+timeCreated: 1513440366
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: platform-tiles_0
-    21300002: platform-tiles_1
-    21300004: platform-tiles_2
-    21300006: platform-tiles_3
-    21300008: platform-tiles_4
-    21300010: platform-tiles_5
-    21300012: platform-tiles_6
-    21300014: platform-tiles_7
-    21300016: platform-tiles_8
-    21300018: platform-tiles_9
-    21300020: platform-tiles_10
-    21300022: platform-tiles_11
-    21300024: platform-tiles_12
-    21300026: platform-tiles_13
-    21300028: platform-tiles_14
-    21300030: platform-tiles_15
-    21300032: platform-tiles_16
-    21300034: platform-tiles_17
-    21300036: platform-tiles_18
-    21300038: platform-tiles_19
-    21300040: platform-tiles_20
-    21300042: platform-tiles_21
-    21300044: platform-tiles_22
-    21300046: platform-tiles_23
-    21300048: platform-tiles_24
-    21300050: platform-tiles_25
-    21300052: platform-tiles_26
-    21300054: platform-tiles_27
-    21300056: platform-tiles_28
-    21300058: platform-tiles_29
-    21300060: platform-tiles_30
-    21300062: platform-tiles_31
-    21300064: platform-tiles_32
-    21300066: platform-tiles_33
-    21300068: platform-tiles_34
-    21300070: platform-tiles_35
-    21300072: platform-tiles_36
-    21300074: platform-tiles_37
-    21300076: platform-tiles_38
-    21300078: platform-tiles_39
-    21300080: platform-tiles_40
-    21300082: platform-tiles_41
-    21300084: platform-tiles_42
-    21300086: platform-tiles_43
+    21300000: left-corner
+    21300002: flat-surface
+    21300004: right-corner
+    21300006: left-corner-slope-down
+    21300008: slope-down-surface
+    21300010: right-corner-slope-down
+    21300012: slope-down-2-of-3
+    21300014: slope-down-3-of-3
+    21300016: left-edge
+    21300018: solid-ground
+    21300020: right-edge
+    21300022: slope-down-1-of-3
+    21300024: slope-down-subsurface
+    21300026: right-edge-slope-down
+    21300028: slope-down-2-of-3-subsurface
+    21300030: slope-down-3-of-3-subsurface
+    21300032: solitary-steep-down
+    21300034: left-corner-steep-down
+    21300036: right-corner-steep-down
+    21300038: slope-up-1-of-3
+    21300040: slope-up-2-of-3
+    21300042: left-corner-slope-up
+    21300044: slope-up-surface
+    21300046: right-corner-slope-up
+    21300048: solitary-steep-down-subsurface
+    21300050: left-corner-steep-down-subsurface
+    21300052: right-corner-steep-down-subsurface
+    21300054: slope-up-1-of-3-subsurface
+    21300056: slope-up-2-of-3-subsurface
+    21300058: left-edge-slope-up
+    21300060: slope-up-subsurface
+    21300062: slope-up-3-of-3
+    21300064: steep-down
+    21300066: solitary-flat-surface
+    21300068: steep-up
+    21300070: steep-down-subsurface
+    21300072: solitary-flat-subsurface
+    21300074: steep-up-subsurface
+    21300076: left-corner-steep-up
+    21300078: right-corner-steep-up
+    21300080: solitary-steep-up
+    21300082: left-corner-steep-up-subsurface
+    21300084: right-corner-steep-up-subsurface
+    21300086: solitary-steep-up-subsurface
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -140,7 +140,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: platform-tiles_0
+      name: left-corner
       rect:
         serializedVersion: 2
         x: 1
@@ -148,13 +148,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_1
+      name: flat-surface
       rect:
         serializedVersion: 2
         x: 19
@@ -162,13 +162,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_2
+      name: right-corner
       rect:
         serializedVersion: 2
         x: 37
@@ -176,13 +176,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_3
+      name: left-corner-slope-down
       rect:
         serializedVersion: 2
         x: 55
@@ -190,13 +190,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_4
+      name: slope-down-surface
       rect:
         serializedVersion: 2
         x: 73
@@ -204,13 +204,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_5
+      name: right-corner-slope-down
       rect:
         serializedVersion: 2
         x: 91
@@ -218,13 +218,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_6
+      name: slope-down-2-of-3
       rect:
         serializedVersion: 2
         x: 109
@@ -232,13 +232,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_7
+      name: slope-down-3-of-3
       rect:
         serializedVersion: 2
         x: 127
@@ -246,13 +246,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_8
+      name: left-edge
       rect:
         serializedVersion: 2
         x: 1
@@ -260,13 +260,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_9
+      name: solid-ground
       rect:
         serializedVersion: 2
         x: 19
@@ -274,13 +274,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_10
+      name: right-edge
       rect:
         serializedVersion: 2
         x: 37
@@ -288,13 +288,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_11
+      name: slope-down-1-of-3
       rect:
         serializedVersion: 2
         x: 55
@@ -302,13 +302,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_12
+      name: slope-down-subsurface
       rect:
         serializedVersion: 2
         x: 73
@@ -316,13 +316,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_13
+      name: right-edge-slope-down
       rect:
         serializedVersion: 2
         x: 91
@@ -330,13 +330,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_14
+      name: slope-down-2-of-3-subsurface
       rect:
         serializedVersion: 2
         x: 109
@@ -344,13 +344,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_15
+      name: slope-down-3-of-3-subsurface
       rect:
         serializedVersion: 2
         x: 127
@@ -358,13 +358,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_16
+      name: solitary-steep-down
       rect:
         serializedVersion: 2
         x: 1
@@ -372,13 +372,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_17
+      name: left-corner-steep-down
       rect:
         serializedVersion: 2
         x: 19
@@ -386,13 +386,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_18
+      name: right-corner-steep-down
       rect:
         serializedVersion: 2
         x: 37
@@ -400,13 +400,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_19
+      name: slope-up-1-of-3
       rect:
         serializedVersion: 2
         x: 55
@@ -414,13 +414,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_20
+      name: slope-up-2-of-3
       rect:
         serializedVersion: 2
         x: 73
@@ -428,13 +428,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_21
+      name: left-corner-slope-up
       rect:
         serializedVersion: 2
         x: 91
@@ -442,13 +442,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_22
+      name: slope-up-surface
       rect:
         serializedVersion: 2
         x: 109
@@ -456,13 +456,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_23
+      name: right-corner-slope-up
       rect:
         serializedVersion: 2
         x: 127
@@ -470,13 +470,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_24
+      name: solitary-steep-down-subsurface
       rect:
         serializedVersion: 2
         x: 1
@@ -484,13 +484,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_25
+      name: left-corner-steep-down-subsurface
       rect:
         serializedVersion: 2
         x: 19
@@ -498,13 +498,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_26
+      name: right-corner-steep-down-subsurface
       rect:
         serializedVersion: 2
         x: 37
@@ -512,13 +512,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_27
+      name: slope-up-1-of-3-subsurface
       rect:
         serializedVersion: 2
         x: 55
@@ -526,13 +526,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_28
+      name: slope-up-2-of-3-subsurface
       rect:
         serializedVersion: 2
         x: 73
@@ -540,13 +540,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_29
+      name: left-edge-slope-up
       rect:
         serializedVersion: 2
         x: 91
@@ -554,13 +554,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_30
+      name: slope-up-subsurface
       rect:
         serializedVersion: 2
         x: 109
@@ -568,13 +568,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_31
+      name: slope-up-3-of-3
       rect:
         serializedVersion: 2
         x: 127
@@ -582,13 +582,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_32
+      name: steep-down
       rect:
         serializedVersion: 2
         x: 1
@@ -596,13 +596,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_33
+      name: solitary-flat-surface
       rect:
         serializedVersion: 2
         x: 19
@@ -610,13 +610,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_34
+      name: steep-up
       rect:
         serializedVersion: 2
         x: 37
@@ -624,13 +624,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_35
+      name: steep-down-subsurface
       rect:
         serializedVersion: 2
         x: 1
@@ -638,13 +638,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_36
+      name: solitary-flat-subsurface
       rect:
         serializedVersion: 2
         x: 19
@@ -652,13 +652,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_37
+      name: steep-up-subsurface
       rect:
         serializedVersion: 2
         x: 37
@@ -666,13 +666,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_38
+      name: left-corner-steep-up
       rect:
         serializedVersion: 2
         x: 1
@@ -680,13 +680,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_39
+      name: right-corner-steep-up
       rect:
         serializedVersion: 2
         x: 19
@@ -694,13 +694,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_40
+      name: solitary-steep-up
       rect:
         serializedVersion: 2
         x: 37
@@ -708,13 +708,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_41
+      name: left-corner-steep-up-subsurface
       rect:
         serializedVersion: 2
         x: 1
@@ -722,13 +722,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_42
+      name: right-corner-steep-up-subsurface
       rect:
         serializedVersion: 2
         x: 19
@@ -736,13 +736,13 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: platform-tiles_43
+      name: solitary-steep-up-subsurface
       rect:
         serializedVersion: 2
         x: 37
@@ -750,7 +750,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
