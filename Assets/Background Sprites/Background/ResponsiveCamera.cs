@@ -6,27 +6,27 @@ using UnityEngine;
 public class ResponsiveCamera : MonoBehaviour
 {
 
-    Vector2 emulatedResolution = new Vector2(17, 10);
+    Vector2 optimalAspectRatio = new Vector2(17, 10);
     Vector2 screenAspectRatio;
     Camera cam;
-    float emuResFloat;
+    float optimalARFloat;
     float screenARFloat;
 	
 	void Awake ()
 	{
         cam  = GetComponent<Camera>();
         screenAspectRatio = new Vector2(Screen.width, Screen.height);
-        emuResFloat = emulatedResolution.x / emulatedResolution.y;
+        optimalARFloat = optimalAspectRatio.x / optimalAspectRatio.y;
         screenARFloat = screenAspectRatio.x / screenAspectRatio.y;
-        if (screenARFloat > emuResFloat)
+        if (screenARFloat > optimalARFloat)
         {
-            cam.orthographicSize = (emulatedResolution.x / screenARFloat) / 2;
+            cam.orthographicSize = (optimalAspectRatio.x / screenARFloat) / 2;
         }
 	    else
 	    {
-	        cam.orthographicSize = emulatedResolution.y / 2;
+	        cam.orthographicSize = optimalAspectRatio.y / 2;
         }
-        Debug.Log("Screen width: " + Screen.width + ", Screen height: " + Screen.height + "\nScreen aspect ratio: " + screenARFloat + ", Emulated resolution aspect ratio: " + emuResFloat);
+        Debug.Log("Screen width: " + Screen.width + ", Screen height: " + Screen.height + "\nScreen aspect ratio: " + screenARFloat + ", Optimal aspect ratio: " + optimalARFloat);
 	}
 
 }
