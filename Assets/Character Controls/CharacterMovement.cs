@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Character_Controls
@@ -13,7 +11,7 @@ namespace Assets.Character_Controls
 
 
         public int MovementSpeed = 5;
-        public int MovementSmoothing = 5;
+        public float MovementThreshold = 0.2f;
         public float SprintMultiplier = 1.5f;
         public int JumpForce = 5;
 
@@ -22,34 +20,35 @@ namespace Assets.Character_Controls
         public LayerMask LayerMask;
 
 
+        Rigidbody2D rb;
 
-        private Rigidbody2D _rb;
-
-        private Rect _groundDetectionRect = Rect.zero;
-        private RectToLines _rtl;
-        private Vector2 _gdrPointA;
-        private Vector2 _gdrPointB;
-
-
-
-        private float _horizontalInputValue;
-        private float _sprintInputValue;
-        private float _jumpInputValue;
+        Rect groundDetectionRect = Rect.zero;
+        RectToLines rtl1;
+        Vector2 gdrPointA;
+        Vector2 gdrPointB;
+     /* Rect jumpLandingDetectionRect = Rect.zero;
+        RectToLines rtl2;
+        Vector2 jldrPointA;
+        Vector2 jldrPointB;  */
 
 
+        float horizontalInputValue;
+        float sprintInputValue;
+        bool jumpInputValue;
 
-        private float _hVelocity;
-        private float _vVelocity;
-        private float _mvmtSmoothener;
-        private float _mvmtSmoothenerBase;
+
+
+        float hVelocity;
+        float vVelocity;
+        float sprintAccelerator;
+        float sprintEffect;
 
 
 
         [HideInInspector]
         public bool GroundContact;
-        private bool SetGroundContact
+        bool SetGroundContact
         {
-            get { return GroundContact; }
             set
             {
                 if (GroundContact == value) return;
@@ -63,17 +62,14 @@ namespace Assets.Character_Controls
                         GroundContact = false;
                         Debug.Log("Character not on ground\nGroundContact set to false");
                         break;
-                    default:
-                        break;
                 }
             }
         }
 
         [HideInInspector]
         public bool IsMoving;
-        private bool SetIfMoving
+        bool SetIfMoving
         {
-            get { return IsMoving; }
             set
             {
                 if (IsMoving == value) return;
@@ -87,17 +83,14 @@ namespace Assets.Character_Controls
                         IsMoving = false;
                         Debug.Log("Character stopped moving\nIsMoving set to false");
                         break;
-                    default:
-                        break;
                 }
             }
         }
 
         [HideInInspector]
         public bool IsSprinting;
-        private bool SetIfSprinting
+        bool SetIfSprinting
         {
-            get { return IsSprinting; }
             set
             {
                 if (IsSprinting == value) return;
@@ -111,22 +104,46 @@ namespace Assets.Character_Controls
                         IsSprinting = false;
                         Debug.Log("Character stopped sprinting\nIsSprinting set to false");
                         break;
-                    default:
-                        break;
                 }
             }
         }
 
         [HideInInspector]
         public bool IsJumping;
-        private bool SetIfJumping
+        bool SetIfJumping
         {
-            get { return IsJumping; }
             set
             {
                 if (IsJumping == value) return;
-                if (value == true) Debug.Log("Character jumped\nIsJumping set to true 'til character lands again");
+                if (value) Debug.Log("Character jumped\nIsJumping set to true 'til character lands again");
                 IsJumping = value;
+            }
+        }
+
+        [HideInInspector]
+        public bool FacingRight = true;
+        [HideInInspector]
+        public bool FacingLeft;
+
+        string SetFacingDirection
+        {
+            set
+            {
+                switch (value)
+                {
+                    case "right":
+                        if (FacingRight) break;
+                        FacingRight = true;
+                        FacingLeft = false;
+                        Debug.Log("Character facing right\nMovingRight set to true");
+                        break;
+                    case "left":
+                        if (FacingLeft) break;
+                        FacingLeft = true;
+                        FacingRight = false;
+                        Debug.Log("Character facing left\nMovingLeft set to true");
+                        break;
+                }
             }
         }
 
@@ -134,18 +151,19 @@ namespace Assets.Character_Controls
 
 
 
-        private void OnDrawGizmos()
+        // ReSharper disable once UnusedMember.Local
+        void OnDrawGizmos()
         {
 
             Gizmos.color = Color.red;
 
             var gdrPos = GroundDetectionRectPosition * OnePixelInUnits;
             var gdrSize = GroundDetectionRectSize * OnePixelInUnits;
-            _groundDetectionRect.size = gdrSize;
-            _groundDetectionRect.center = gdrPos;
+            groundDetectionRect.size = gdrSize;
+            groundDetectionRect.center = gdrPos;
 
-            _rtl = new RectToLines(_groundDetectionRect);
-            _rtl.DrawGizmoRect(transform.position);
+            rtl1 = new RectToLines(groundDetectionRect);
+            rtl1.DrawGizmoRect(transform.position);
 
         }
 
@@ -153,38 +171,40 @@ namespace Assets.Character_Controls
 
 
 
-        private void Awake()
+        // ReSharper disable once UnusedMember.Local
+        void Awake()
         {
 
-            _rb = GetComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
 
             var gdrPos = GroundDetectionRectPosition * OnePixelInUnits;
             var gdrSize = GroundDetectionRectSize * OnePixelInUnits;
-            _groundDetectionRect.size = gdrSize;
-            _groundDetectionRect.center = gdrPos;
+            groundDetectionRect.size = gdrSize;
+            groundDetectionRect.center = gdrPos;
 
-            _rtl = new RectToLines(_groundDetectionRect);
-            _gdrPointA = _rtl._topLineFrom;
-            _gdrPointB = _rtl._rightLineTo;
+            rtl1 = new RectToLines(groundDetectionRect);
+            gdrPointA = rtl1.TopLineFrom;
+            gdrPointB = rtl1.RightLineTo;
 
-            Debug.Log("Inital Physics2D.OverlapArea is (" + _gdrPointA.x + ", " + _gdrPointA.y + ") to (" + _gdrPointB.y + ", " + _gdrPointB.y + ")");
+            Debug.Log("Inital Physics2D.OverlapArea is (" + gdrPointA.x + ", " + gdrPointA.y + ") to (" + gdrPointB.y + ", " + gdrPointB.y + ")");
 
-            _mvmtSmoothenerBase = 1f / (MovementSmoothing * 10f);
-            _mvmtSmoothener = _mvmtSmoothenerBase;
+            sprintAccelerator = 1;
+            sprintEffect = JumpForce * 2;
 
         }
-	
-        private void FixedUpdate()
+
+        // ReSharper disable once UnusedMember.Local
+        void FixedUpdate()
         {
+
+            horizontalInputValue = Input.GetAxis("Horizontal");
+            sprintInputValue = Input.GetAxis("Sprint");
+            jumpInputValue = Input.GetButtonDown("Jump");
 
             CharacterMovementState();
 
-            if (GroundContact == false) return;
-
             HorizontalMovement();
-
-            _jumpInputValue = Input.GetAxisRaw("Jump");
-            _rb.AddForce(new Vector2(0, _jumpInputValue * JumpForce * 10));
+            Jump();
 
         }
 
@@ -192,52 +212,66 @@ namespace Assets.Character_Controls
 
 
 
-        private void CharacterMovementState()
+        void CharacterMovementState()
         {
 
-            var pointA = Vector2Addition(transform.position, _gdrPointA);
-            var pointB = Vector2Addition(transform.position, _gdrPointB);
+            var pointA = Vector2Addition(transform.position, gdrPointA);
+            var pointB = Vector2Addition(transform.position, gdrPointB);
+
             SetGroundContact = Physics2D.OverlapArea(pointA, pointB, LayerMask);
 
+            var vel = rb.velocity;
+
+            if (GroundContact && Math.Abs(vel.x) > MovementSpeed * MovementThreshold) SetIfMoving = true;
+            else SetIfMoving = false;
+
+            if (IsMoving && sprintInputValue > 0) SetIfSprinting = true;
+            else SetIfSprinting = false;
+
+            if (GroundContact && jumpInputValue) SetIfJumping = true;
+            if (IsJumping && GroundContact) SetIfJumping = false;
+
+            if (vel.x > 0) SetFacingDirection = "right";
+            else if (vel.x < 0) SetFacingDirection = "left";
+
         }
 
-        private void HorizontalMovement()
+        void HorizontalMovement()
         {
-            _horizontalInputValue = Input.GetAxisRaw("Horizontal");
-            var vel = _rb.velocity;
-            if (!(Math.Abs(_horizontalInputValue) > 0) && !(Math.Abs(vel.x) > 0))
+
+            if (sprintInputValue * SprintMultiplier > 1)
             {
-                return;
+                sprintAccelerator = sprintInputValue * SprintMultiplier;
+                if (sprintEffect > ((float)JumpForce * 2) / 4) sprintEffect -= (float)JumpForce / 100;
+                Debug.Log(sprintEffect);
             }
-            else if ((_horizontalInputValue > 0  && vel.x >= 0) || (_horizontalInputValue < 0 && vel.x <= 0))
+            else
             {
-                _hVelocity = _horizontalInputValue * MovementSpeed * easeInQuart(_mvmtSmoothener);
-                _vVelocity = vel.y;
-                _rb.velocity = new Vector2(_hVelocity, _vVelocity);
-                if (_mvmtSmoothener <= 1) _mvmtSmoothener += _mvmtSmoothenerBase;
+                sprintAccelerator = 1;
+                sprintEffect = JumpForce * 2;
             }
-            else if ((_horizontalInputValue > 0 && vel.x < 0) || (_horizontalInputValue < 0 && vel.x > 0))
+
+            hVelocity = horizontalInputValue * MovementSpeed * sprintAccelerator;
+            vVelocity = rb.velocity.y;
+            rb.velocity = new Vector2(hVelocity, vVelocity);
+
+        }
+
+        void Jump()
+        {
+
+            if (GroundContact && jumpInputValue)
             {
-                _hVelocity = MovementSpeed * (1 - easeInQuart(_mvmtSmoothener));
-                _vVelocity = vel.y;
-                _rb.velocity = new Vector2(_hVelocity, _vVelocity);
-                if (_mvmtSmoothener > 0) _mvmtSmoothener -= _mvmtSmoothenerBase;
+                rb.AddForce(new Vector2(0, (float)Math.Pow(JumpForce, JumpForce) / sprintEffect));
             }
-            else if (Math.Abs(vel.x) > 0)
-            {
-                _hVelocity = MovementSpeed * (1 - easeInQuart(_mvmtSmoothener));
-                _vVelocity = vel.y;
-                _rb.velocity = new Vector2(_hVelocity, _vVelocity);
-                if (_mvmtSmoothener > 0) _mvmtSmoothener -= _mvmtSmoothenerBase;
-            }
-            
+                
         }
 
 
 
 
 
-        private static Vector2 Vector2Addition(Vector2 firstVector, Vector2 secondVector)
+        static Vector2 Vector2Addition(Vector2 firstVector, Vector2 secondVector)
         {
 
             firstVector.x += secondVector.x;
@@ -246,50 +280,45 @@ namespace Assets.Character_Controls
 
         }
 
-        private static float easeInQuart(float t)
-        {
-            return t < .5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t; // check out https://gist.github.com/gre/1650294
-        }
 
 
 
 
+        class RectToLines {
 
-        private class RectToLines {
+            public readonly Vector2 TopLineFrom;
+            public readonly Vector2 TopLineTo;
 
-            public readonly Vector2 _topLineFrom;
-            public readonly Vector2 _topLineTo;
+            public readonly Vector2 RightLineFrom;
+            public readonly Vector2 RightLineTo;
 
-            public readonly Vector2 _rightLineFrom;
-            public readonly Vector2 _rightLineTo;
+            public readonly Vector2 BottomLineFrom;
+            public readonly Vector2 BottomLineTo;
 
-            public readonly Vector2 _bottomLineFrom;
-            public readonly Vector2 _bottomLineTo;
-
-            public readonly Vector2 _leftLineFrom;
-            public readonly Vector2 _leftLineTo;
+            public readonly Vector2 LeftLineFrom;
+            public readonly Vector2 LeftLineTo;
 
             public RectToLines(Rect rect)
             {
-                _topLineFrom = new Vector3(rect.xMin, rect.yMin, 0);
-                _topLineTo = new Vector3(rect.xMax, rect.yMin, 0);
+                TopLineFrom = new Vector3(rect.xMin, rect.yMin, 0);
+                TopLineTo = new Vector3(rect.xMax, rect.yMin, 0);
 
-                _rightLineFrom = new Vector3(rect.xMax, rect.yMin, 0);
-                _rightLineTo = new Vector3(rect.xMax, rect.yMax, 0);
+                RightLineFrom = new Vector3(rect.xMax, rect.yMin, 0);
+                RightLineTo = new Vector3(rect.xMax, rect.yMax, 0);
 
-                _bottomLineFrom = new Vector3(rect.xMax, rect.yMax, 0);
-                _bottomLineTo = new Vector3(rect.xMin, rect.yMax, 0);
+                BottomLineFrom = new Vector3(rect.xMax, rect.yMax, 0);
+                BottomLineTo = new Vector3(rect.xMin, rect.yMax, 0);
 
-                _leftLineFrom = new Vector3(rect.xMin, rect.yMax, 0);
-                _leftLineTo = new Vector3(rect.xMin, rect.yMin, 0);
+                LeftLineFrom = new Vector3(rect.xMin, rect.yMax, 0);
+                LeftLineTo = new Vector3(rect.xMin, rect.yMin, 0);
             }
 
             public void DrawGizmoRect(Vector2 currentPosition)
             {
-                Gizmos.DrawLine(Vector2Addition(currentPosition, _topLineFrom), Vector2Addition(currentPosition, _topLineTo));
-                Gizmos.DrawLine(Vector2Addition(currentPosition, _rightLineFrom), Vector2Addition(currentPosition, _rightLineTo));
-                Gizmos.DrawLine(Vector2Addition(currentPosition, _bottomLineFrom), Vector2Addition(currentPosition, _bottomLineTo));
-                Gizmos.DrawLine(Vector2Addition(currentPosition, _leftLineFrom), Vector2Addition(currentPosition, _leftLineTo));
+                Gizmos.DrawLine(Vector2Addition(currentPosition, TopLineFrom), Vector2Addition(currentPosition, TopLineTo));
+                Gizmos.DrawLine(Vector2Addition(currentPosition, RightLineFrom), Vector2Addition(currentPosition, RightLineTo));
+                Gizmos.DrawLine(Vector2Addition(currentPosition, BottomLineFrom), Vector2Addition(currentPosition, BottomLineTo));
+                Gizmos.DrawLine(Vector2Addition(currentPosition, LeftLineFrom), Vector2Addition(currentPosition, LeftLineTo));
             }
 
         }
