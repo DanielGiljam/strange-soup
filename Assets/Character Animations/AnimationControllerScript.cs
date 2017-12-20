@@ -1,4 +1,4 @@
-﻿using Assets.Character_Controls;
+﻿using Assets.Character_Logic;
 using UnityEngine;
 
 namespace Assets.Character_Animations
@@ -7,23 +7,24 @@ namespace Assets.Character_Animations
     {
 
         Animator animator;
-        CharacterMovement charMov;
+        CharacterMovement cm;
+        CharacterState cs;
 
-        // ReSharper disable once UnusedMember.Local
         void Awake ()
         {
             animator = GetComponent<Animator>();
-            charMov = GetComponent<CharacterMovement>();
+            cm = GetComponent<CharacterMovement>();
+            cs = GetComponent<CharacterState>();
         }
 	
-        // ReSharper disable once UnusedMember.Local
         void Update () {
-		    animator.SetBool("FacingRight", charMov.FacingRight);
-            animator.SetBool("FacingLeft", charMov.FacingLeft);
-            animator.SetBool("IsMoving", charMov.IsMoving);
-            animator.SetBool("IsSprinting", charMov.IsSprinting);
-            animator.SetBool("IsJumping", charMov.IsJumping);
-            animator.SetBool("GroundContact", charMov.GroundContact);
+		    animator.SetBool("FacingRight", cs.FacingRight);
+            animator.SetBool("FacingLeft", cs.FacingLeft);
+            animator.SetBool("IsMoving", cs.IsMoving);
+            animator.SetBool("IsSprinting", cs.IsSprinting);
+            animator.SetBool("IsJumping", cs.IsJumping);
+            animator.SetBool("GroundContact", cs.GroundContact);
+            animator.speed = cm.ActualSprintMultiplier + 1;
         }
 
     }

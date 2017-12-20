@@ -5,10 +5,14 @@ namespace Assets
     public class ResponsiveCamera : MonoBehaviour
     {
 
+        // adjust amount of smoothing in camera's movements. Scale 0-1. Smaller value means more smoothing. 1 means no smoothing. Do not set to 0.
         public float CameraFollowSmoothing = 0.2f;
+
+        // how much vertical character movement the camera will tolerate until following the movement
         public float UpperBounds = 0f;
         public float LowerBounds = 2.3f;
 
+        // following variables have to do with the sizing of the camera in the Awake -method
         Vector2 optimalAspectRatio = new Vector2(17, 10);
         Vector2 screenAspectRatio;
         Camera cam;
@@ -16,7 +20,6 @@ namespace Assets
         float optimalArFloat;
         float screenArFloat;
 	
-        // ReSharper disable once UnusedMember.Local
         void Awake()
         {
             cam  = GetComponent<Camera>();
@@ -35,7 +38,6 @@ namespace Assets
             Debug.Log("Screen width: " + Screen.width + ", Screen height: " + Screen.height + "\nScreen aspect ratio: " + screenArFloat + ", Optimal aspect ratio: " + optimalArFloat);
         }
 
-        // ReSharper disable once UnusedMember.Local
         void Update()
         {
             if (character.transform.position.y >= transform.position.y + UpperBounds)

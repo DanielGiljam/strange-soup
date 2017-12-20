@@ -367,8 +367,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2108663901}
-  - {fileID: 1073305880}
   - {fileID: 795284216}
+  - {fileID: 1073305880}
   m_Father: {fileID: 619085298}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1125,7 +1125,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 156725844}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &795284217
 SpriteRenderer:
@@ -1141,7 +1141,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 286d7fc027a661d48ab83ecaa8a28f70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1177,13 +1177,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 795284215}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 705641b8836dd4ae6950245691d740ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HorizontalIntensity: 8
-  VerticalIntensity: 0.8
+  VerticalIntensity: 4
 --- !u!1 &832112511
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,7 +2045,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 156725844}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1073305881
 SpriteRenderer:
@@ -2061,7 +2061,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1024fac2016958e49ac73c403cc8c7d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2097,13 +2097,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1073305879}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 705641b8836dd4ae6950245691d740ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HorizontalIntensity: 8
-  VerticalIntensity: 0.4
+  HorizontalIntensity: 16
+  VerticalIntensity: 8
 --- !u!1 &1153169795
 GameObject:
   m_ObjectHideFlags: 0
@@ -3638,6 +3638,7 @@ GameObject:
   - component: {fileID: 2048636509}
   - component: {fileID: 2048636503}
   - component: {fileID: 2048636508}
+  - component: {fileID: 2048636510}
   - component: {fileID: 2048636507}
   m_Layer: 0
   m_Name: Character
@@ -3661,7 +3662,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
-  m_Material: {fileID: 6200000, guid: a66f48163408d46e89a995d0166b0037, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -3764,19 +3765,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 5
   MovementThreshold: 0.2
-  SprintMultiplier: 1.5
+  SprintMultiplier: 0.5
   JumpForce: 5
+  SprintJumpEffectAmount: 0.25
+  SprintJumpEffectChargeTime: 100
   GroundDetectionRectPosition: {x: 0, y: -20}
   GroundDetectionRectSize: {x: 20, y: 2}
   LayerMask:
     serializedVersion: 2
     m_Bits: 256
-  GroundContact: 0
-  IsMoving: 0
-  IsSprinting: 0
-  IsJumping: 0
-  FacingRight: 1
-  FacingLeft: 0
+  GdrPointA: {x: 0, y: 0}
+  GdrPointB: {x: 0, y: 0}
+  ActualSprintMultiplier: 0
 --- !u!61 &2048636509
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3802,6 +3802,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 2.5}
   m_EdgeRadius: 0
+--- !u!114 &2048636510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2048636502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9d0aed3036dc4458650d4ca73a97ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GroundContact: 0
+  IsMoving: 0
+  IsSprinting: 0
+  IsJumping: 0
+  FacingRight: 1
+  FacingLeft: 0
 --- !u!1 &2058504678
 GameObject:
   m_ObjectHideFlags: 0
@@ -4147,7 +4164,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f300480545db44e45ad43f89a58c79ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4183,10 +4200,10 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2108663900}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 705641b8836dd4ae6950245691d740ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HorizontalIntensity: 8
-  VerticalIntensity: 0.2
+  HorizontalIntensity: 2
+  VerticalIntensity: 2

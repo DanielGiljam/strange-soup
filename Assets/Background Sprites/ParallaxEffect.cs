@@ -4,29 +4,37 @@ namespace Assets.Background_Sprites
 {
     public class ParallaxEffect : MonoBehaviour {
 
-        const float OnePixelInUnits = 0.0625f;
+        const float OnePixelInUnits = 1f / 272f * 0.0625f;
+        const float OnePixelInTextureOffsetUnits = 1f / 272f * 0.0625f;
 
         public float HorizontalIntensity = 8;
         public float VerticalIntensity = 8;
 
         Camera cam;
-        float camDeltaY;
-        float actualHIntensity;
-        float actualVIntensity;
+        Material material;
 
-        // ReSharper disable once UnusedMember.Local
+
         void Awake()
         {
             cam = Camera.main;
-            actualHIntensity = (HorizontalIntensity * OnePixelInUnits) / 2;
-            actualVIntensity = (VerticalIntensity * OnePixelInUnits) / 2;
+            material = GetComponent<Renderer>().material;
         }
 	
-        // ReSharper disable once UnusedMember.Local
         void Update()
         {
-            transform.position = new Vector2(transform.position.x, transform.position.y + (camDeltaY * actualVIntensity));
-            camDeltaY -= cam.transform.position.y;
+            HorizontalParallax();
+            VerticalParallax();
+        }
+
+        void HorizontalParallax()
+        {
+            material.SetTextureOffset("_MainTex", new Vector2(cam.transform.position.x * (HorizontalIntensity * OnePixelInTextureOffsetUnits), 0));
+        }
+
+        void VerticalParallax()
+        {
+            transform.position = new Vector2(transform.position.x,
+                cam.transform.position.y * (HorizontalIntensity * OnePixelInUnits));
         }
 
     }
