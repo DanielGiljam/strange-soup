@@ -9,7 +9,7 @@ namespace Assets
         public float CameraFollowSmoothing = 0.2f;
 
         // how much vertical character movement the camera will tolerate until following the movement
-        public float UpperBounds = 0f;
+        public float UpperBounds = 0;
         public float LowerBounds = 2.3f;
 
         // following variables have to do with the sizing of the camera in the Awake -method

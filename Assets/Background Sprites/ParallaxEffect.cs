@@ -34,7 +34,7 @@ namespace Assets.Background_Sprites
         void VerticalParallax()
         {
             transform.position = new Vector2(transform.position.x,
-                cam.transform.position.y * (HorizontalIntensity * OnePixelInUnits));
+                cam.transform.position.y * (VerticalIntensity * OnePixelInUnits));
         }
 
     }

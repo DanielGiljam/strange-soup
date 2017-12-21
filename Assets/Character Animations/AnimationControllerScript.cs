@@ -10,14 +10,14 @@ namespace Assets.Character_Animations
         CharacterMovement cm;
         CharacterState cs;
 
-        void Awake ()
+        void Awake()
         {
             animator = GetComponent<Animator>();
             cm = GetComponent<CharacterMovement>();
             cs = GetComponent<CharacterState>();
         }
 	
-        void Update () {
+        void Update() {
 		    animator.SetBool("FacingRight", cs.FacingRight);
             animator.SetBool("FacingLeft", cs.FacingLeft);
             animator.SetBool("IsMoving", cs.IsMoving);
