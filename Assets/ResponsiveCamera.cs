@@ -40,6 +40,7 @@ namespace Assets
 
         void Update()
         {
+            // upperBounds - lowerBounds setup made by Albert Nyberg
             if (character.transform.position.y >= transform.position.y + UpperBounds)
             {
                 transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x, character.transform.position.y - UpperBounds, -10), CameraFollowSmoothing);

@@ -58,7 +58,8 @@ namespace Assets.Character_Logic
         } // "Jump" (default)
 
         // variables updated every time Unity's physics engine updates
-        Vector2 currentVelocity; // self-explanatory (using rb.velocity's set method)
+        Vector2 currentVelocity; // self-explanatory (using rb.velocity's get method)
+        float gravityScale; // self-explanatory (using rb.gravityScale's get method)
         float sprintJumpEffect; // decreases when sprinting, which in turn causes the character to jump higher, as sprintJumpEffect divides actualJumpForce before it's added as a positive Y force to the "rb"
 
 
@@ -108,8 +109,9 @@ namespace Assets.Character_Logic
         void FixedUpdate()
         {
 
-            // updating current velocity in its own variable, as it is used a lot
+            // updating current velocity and gravity scale in its own variable, as it is used a lot
             currentVelocity = rb.velocity;
+            gravityScale = rb.gravityScale;
 
             // updating states
             csc.CharacterMovementState(currentVelocity);
@@ -155,6 +157,20 @@ namespace Assets.Character_Logic
             else if (!csc.GroundContact || JumpInputValue < 0.5f)
             {
                 jumpReset = false;
+            }
+
+            // following if - else statement inspired by YouTuber Board to Bits Games video on how to improve jumping in Unity
+            if (currentVelocity.y < 0)
+            {
+                rb.velocity += Vector2.up * ((3 * Physics2D.gravity.y) / 50) * gravityScale;
+            }
+            if (currentVelocity.y > 0 && JumpInputValue < 0.5f)
+            {
+                rb.velocity += Vector2.up * ((2 * Physics2D.gravity.y) / 50) * gravityScale;
+            }
+            else if (currentVelocity.y > 0)
+            {
+                rb.velocity += Vector2.up * ((1 * Physics2D.gravity.y) / 50) * gravityScale;
             }
                 
         }
