@@ -95,6 +95,27 @@ namespace Assets.Character_Logic
         }
 
         [HideInInspector]
+        public bool IsSliding;
+        bool SetIfSliding
+        {
+            set
+            {
+                if (IsSliding == value) return;
+                switch (value)
+                {
+                    case true:
+                        IsSliding = true;
+                        Debug.Log("Character started sliding\nIsSliding set to true");
+                        break;
+                    case false:
+                        IsSliding = false;
+                        Debug.Log("Character stopped sliding\nIsSliding set to false");
+                        break;
+                }
+            }
+        }
+
+        [HideInInspector]
         public bool IsJumping;
         bool SetIfJumping
         {
@@ -150,6 +171,9 @@ namespace Assets.Character_Logic
 
             if (IsMoving && cm.SprintInputValue > 0) SetIfSprinting = true;
             else SetIfSprinting = false;
+
+            if (cm.sliding) SetIfSliding = true;
+            else SetIfMoving = false;
 
             if (GroundContact && cm.JumpInputValue > 0) SetIfJumping = true;
             if (IsJumping && GroundContact) SetIfJumping = false;

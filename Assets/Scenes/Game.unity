@@ -1849,7 +1849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HorizontalIntensity: 8
-  VerticalIntensity: 4
+  VerticalIntensity: 12
 --- !u!1 &832112511
 GameObject:
   m_ObjectHideFlags: 0
@@ -3703,6 +3703,7 @@ MonoBehaviour:
   CameraFollowSmoothing: 0.2
   UpperBounds: 0
   LowerBounds: 2.3
+  CharacterCenterOffset: 3.2
 --- !u!1 &1437847698
 GameObject:
   m_ObjectHideFlags: 0
@@ -5111,9 +5112,6 @@ MonoBehaviour:
   HorizontalOffsetAngleText: {fileID: 858494}
   ForceText: {fileID: 1343520557}
   FrictionForceText: {fileID: 684373211}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1 &2058504678
 GameObject:
   m_ObjectHideFlags: 0
@@ -5439,7 +5437,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2108663900}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.5, y: -0.5, z: 0}
+  m_LocalPosition: {x: -8.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 156725844}
@@ -5501,4 +5499,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HorizontalIntensity: 2
-  VerticalIntensity: 2
+  VerticalIntensity: 16

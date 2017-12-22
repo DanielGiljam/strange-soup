@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 namespace Assets.Character_Logic
@@ -25,7 +26,7 @@ namespace Assets.Character_Logic
         public LayerMask LayerMask; // choose "Ground Colliders" for the Physics2D.OverlapArea -function to only detect colliders that have been set to that specific layer
 
         Rigidbody2D rb; // reference to the character's Rigidbody -component
-        CharacterState csc; // reference to the character's CharacterStateCommunication -component
+        CharacterState cs; // reference to the character's CharacterStateCommunication -component
 
         Rect groundDetectionRect = Rect.zero; // rectangle object that defines the area used by the Physics2D.OverlapArea -function and that contains the data needed to draw a "gizmo" in Unity's scene view for visualization purposes
         RectToLines rtl; // a custom object that breaks down a Rect object into dots and provides a function for drawing the outlines of that Rect object using the Gizmos.DrawLine -function
@@ -41,7 +42,6 @@ namespace Assets.Character_Logic
         float actualJumpForce; // the actual jump force, (sort of) relative to jumpForce
         float actualActualJumpForce; // the actual actual jump force, (sort of) relative to jumpForce
         float sprintJumpEffectInitial; // the initial sprintJumpEffect, (sort of) relative to jumpForce
-        bool jumpReset;
 
         // references to the virtual axes (see Unity's Input Manager)
         public float HorizontalInputValue
@@ -52,6 +52,10 @@ namespace Assets.Character_Logic
         {
             get { return Input.GetAxis("Sprint"); }
         } // "Sprint" (I added it myself, replacing "Fire3")
+        public float SlideInputValue
+        {
+            get { return Input.GetAxis("Vertical"); }
+        } // "Vertical" (default)
         public float JumpInputValue
         {
             get { return Input.GetAxis("Jump"); }
@@ -61,6 +65,11 @@ namespace Assets.Character_Logic
         Vector2 currentVelocity; // self-explanatory (using rb.velocity's get method)
         float gravityScale; // self-explanatory (using rb.gravityScale's get method)
         float sprintJumpEffect; // decreases when sprinting, which in turn causes the character to jump higher, as sprintJumpEffect divides actualJumpForce before it's added as a positive Y force to the "rb"
+        bool jumpReset;
+        bool otherCollisions;
+
+        [HideInInspector]
+        public bool sliding;
 
 
         // "UNITY FUNCTIONS"
@@ -85,7 +94,7 @@ namespace Assets.Character_Logic
 
             // just fetching the corresponding components...
             rb = GetComponent<Rigidbody2D>();
-            csc = GetComponent<CharacterState>();
+            cs = GetComponent<CharacterState>();
 
             // sizing and positioning the "gdr"
             groundDetectionRect.size = GroundDetectionRectSize * OnePixelInUnits;
@@ -106,6 +115,18 @@ namespace Assets.Character_Logic
         }
 
 
+        void OnCollisionEnter2D()
+        {
+            otherCollisions = true;
+        }
+
+
+        void OnCollisionExit2D()
+        {
+            otherCollisions = false;
+        }
+
+
         void FixedUpdate()
         {
 
@@ -114,10 +135,11 @@ namespace Assets.Character_Logic
             gravityScale = rb.gravityScale;
 
             // updating states
-            csc.CharacterMovementState(currentVelocity);
+            cs.CharacterMovementState(currentVelocity);
 
             // running character movement functions
             HorizontalMovement();
+            Slide();
             Jump();
 
         }
@@ -129,37 +151,47 @@ namespace Assets.Character_Logic
         void HorizontalMovement()
         {
 
-            if (SprintInputValue > 0 && csc.IsMoving)
+            if (SprintInputValue > 0 && cs.IsMoving)
             {
                 if (sprintJumpEffect > sprintJumpEffectInitial * (1 - SprintJumpEffectAmount)) sprintJumpEffect -= (float)actualJumpForce / SprintJumpEffectChargeTime;
                 ActualSprintMultiplier = (1 - ((sprintJumpEffect - (sprintJumpEffectInitial * (1 - SprintJumpEffectAmount))) / (sprintJumpEffectInitial * SprintJumpEffectAmount))) *
                                          SprintMultiplier;
             }
-            else if (csc.GroundContact)
+            else if (cs.GroundContact)
             {
                 sprintJumpEffect = sprintJumpEffectInitial;
                 ActualSprintMultiplier = 0;
             }
-            
+
+            if (otherCollisions == true && !cs.GroundContact) return;
+            if (sliding == true) return;
+
             rb.velocity = new Vector2(HorizontalInputValue * MovementSpeed * (ActualSprintMultiplier + 1), currentVelocity.y);
 
+        }
+
+
+        void Slide()
+        {
+            if (SlideInputValue < 0 && cs.IsMoving) sliding = true;
+            else sliding = false;
         }
 
 
         void Jump()
         {
 
-            if (csc.GroundContact && JumpInputValue > 0.5f && !jumpReset)
+            if (cs.GroundContact && JumpInputValue > 0.5f && !jumpReset)
             {
                 rb.AddForce(new Vector2(0, actualActualJumpForce / sprintJumpEffect));
                 jumpReset = true;
             }
-            else if (!csc.GroundContact || JumpInputValue < 0.5f)
+            else if (!cs.GroundContact || JumpInputValue < 0.5f)
             {
                 jumpReset = false;
             }
 
-            // following if - else statement inspired by YouTuber Board to Bits Games video on how to improve jumping in Unity
+            // following code snippet inspired by YouTuber Board to Bits Games video on how to improve jumping in Unity
             if (currentVelocity.y < 0)
             {
                 rb.velocity += Vector2.up * ((3 * Physics2D.gravity.y) / 50) * gravityScale;

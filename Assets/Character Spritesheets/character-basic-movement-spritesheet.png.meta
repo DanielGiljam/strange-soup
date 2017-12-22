@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1cf16b6f1bcfca843b71ea06fcb96788
-timeCreated: 1513626375
+timeCreated: 1513953593
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -23,6 +23,8 @@ TextureImporter:
     21300032: run-right-2
     21300034: stop-left
     21300036: stop-right
+    21300038: slide-right
+    21300040: slide-left
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -353,29 +355,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: stop-left
+      name: slide-right
       rect:
         serializedVersion: 2
         x: 1
-        y: 1
-        width: 28
-        height: 38
+        y: 13
+        width: 44
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: stop-right
+      name: slide-left
       rect:
         serializedVersion: 2
-        x: 31
-        y: 1
-        width: 28
-        height: 38
+        x: 47
+        y: 13
+        width: 44
+        height: 26
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -4,7 +4,7 @@ namespace Assets.Background_Sprites
 {
     public class ParallaxEffect : MonoBehaviour {
 
-        const float OnePixelInUnits = 1f / 272f * 0.0625f;
+        const float OnePixelInUnits = 0.0625f;
         const float OnePixelInTextureOffsetUnits = 1f / 272f * 0.0625f;
 
         public float HorizontalIntensity = 8;
