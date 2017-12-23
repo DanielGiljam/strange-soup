@@ -22,8 +22,10 @@ namespace Assets.Character_Animations
             animator.SetBool("FacingLeft", cs.FacingLeft);
             animator.SetBool("IsMoving", cs.IsMoving);
             animator.SetBool("IsSprinting", cs.IsSprinting);
+            animator.SetBool("IsSliding", cs.IsSliding);
             animator.SetBool("IsJumping", cs.IsJumping);
             animator.SetBool("GroundContact", cs.GroundContact);
+            animator.SetBool("Idle", cs.Idle);
             animator.speed = cm.ActualSprintMultiplier + 1;
         }
 

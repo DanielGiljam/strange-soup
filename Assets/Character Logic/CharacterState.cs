@@ -53,6 +53,27 @@ namespace Assets.Character_Logic
         }
 
         [HideInInspector]
+        public bool Idle;
+        bool SetIdle
+        {
+            set
+            {
+                if (Idle == value) return;
+                switch (value)
+                {
+                    case true:
+                        Idle = true;
+                        Debug.Log("Character is idle\nIdle set to true");
+                        break;
+                    case false:
+                        Idle = false;
+                        Debug.Log("Character not idle\nIdle set to false");
+                        break;
+                }
+            }
+        }
+
+        [HideInInspector]
         public bool IsMoving;
         bool SetIfMoving
         {
@@ -166,6 +187,9 @@ namespace Assets.Character_Logic
 
             SetGroundContact = Physics2D.OverlapArea(pointA, pointB, cm.LayerMask);
 
+            if (GroundContact && !(Math.Abs(currentVelocity.x) > 0)) SetIdle = true;
+            else SetIdle = false;
+
             if (GroundContact && Math.Abs(currentVelocity.x) > cm.MovementSpeed * cm.MovementThreshold) SetIfMoving = true;
             else SetIfMoving = false;
 
@@ -173,7 +197,7 @@ namespace Assets.Character_Logic
             else SetIfSprinting = false;
 
             if (cm.sliding) SetIfSliding = true;
-            else SetIfMoving = false;
+            else SetIfSliding = false;
 
             if (GroundContact && cm.JumpInputValue > 0) SetIfJumping = true;
             if (IsJumping && GroundContact) SetIfJumping = false;

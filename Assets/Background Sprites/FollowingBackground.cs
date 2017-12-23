@@ -13,7 +13,14 @@ namespace Assets.Background_Sprites
 
         void Update()
         {
-            transform.position = new Vector2(cam.transform.position.x, cam.transform.position.y);
+            if (cam.transform.position.y > 0)
+            {
+                transform.position = new Vector2(cam.transform.position.x, cam.transform.position.y);
+            }
+            else
+            {
+                transform.position = new Vector2(cam.transform.position.x, transform.position.y);
+            }
         }
 
     }

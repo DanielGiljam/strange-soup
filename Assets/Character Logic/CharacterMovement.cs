@@ -65,11 +65,12 @@ namespace Assets.Character_Logic
         Vector2 currentVelocity; // self-explanatory (using rb.velocity's get method)
         float gravityScale; // self-explanatory (using rb.gravityScale's get method)
         float sprintJumpEffect; // decreases when sprinting, which in turn causes the character to jump higher, as sprintJumpEffect divides actualJumpForce before it's added as a positive Y force to the "rb"
-        bool jumpReset;
-        bool otherCollisions;
+        bool jumpReset; // regulates that AddForce only happens one time when jumping
+        bool slideReset; // regulates sliding similarly to how jumpReset regulates jumping
+        bool otherCollisions; // fixes a "stuck to a wall" issue by not allowing players to run into objects they have already collided with 
 
         [HideInInspector]
-        public bool sliding;
+        public bool sliding; // responsible for managing both sliding state and functionality
 
 
         // "UNITY FUNCTIONS"
@@ -137,7 +138,7 @@ namespace Assets.Character_Logic
             // updating states
             cs.CharacterMovementState(currentVelocity);
 
-            // running character movement functions
+            // character movement functions
             HorizontalMovement();
             Slide();
             Jump();
@@ -163,8 +164,8 @@ namespace Assets.Character_Logic
                 ActualSprintMultiplier = 0;
             }
 
-            if (otherCollisions == true && !cs.GroundContact) return;
-            if (sliding == true) return;
+            if (otherCollisions && !cs.GroundContact) return;
+            if (sliding) return;
 
             rb.velocity = new Vector2(HorizontalInputValue * MovementSpeed * (ActualSprintMultiplier + 1), currentVelocity.y);
 
@@ -173,8 +174,22 @@ namespace Assets.Character_Logic
 
         void Slide()
         {
-            if (SlideInputValue < 0 && cs.IsMoving) sliding = true;
-            else sliding = false;
+            if (!slideReset)
+            {
+                if (SlideInputValue < -0.5f && cs.IsMoving)
+                {
+                    sliding = true;
+                }
+                else if (!(Mathf.Abs(currentVelocity.x) > 0))
+                {
+                    slideReset = true;
+                }
+            }
+            if (SlideInputValue > -0.5f || !cs.GroundContact)
+            {
+                sliding = false;
+                slideReset = false;
+            }
         }
 
 
