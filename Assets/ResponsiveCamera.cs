@@ -10,7 +10,7 @@ namespace Assets
         public float CameraFollowSmoothing = 0.2f;
 
         // how much vertical character movement the camera will tolerate until following the movement
-        public float UpperBounds = 0;
+        public float UpperBounds = -1.15f;
         public float LowerBounds = 2.3f;
         public float CharacterCenterOffset = 3.2f;
 

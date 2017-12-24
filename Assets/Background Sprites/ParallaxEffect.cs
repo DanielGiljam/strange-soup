@@ -7,8 +7,9 @@ namespace Assets.Background_Sprites
         const float OnePixelInUnits = 0.0625f;
         const float OnePixelInTextureOffsetUnits = (1f / 272f) * 0.0625f;
 
-        public float HorizontalIntensity = 8;
-        public float VerticalIntensity = 8;
+        public int HorizontalIntensity = 8;
+        public int VerticalIntensity = 8;
+        public float VerticalOffset;
 
         Camera cam;
         Material material;
@@ -33,8 +34,10 @@ namespace Assets.Background_Sprites
 
         void VerticalParallax()
         {
-                transform.position = new Vector2(transform.position.x,
-                cam.transform.position.y * (VerticalIntensity * OnePixelInUnits));
+            if (cam.transform.position.y > 0)
+            {
+                transform.position = new Vector2(transform.position.x, (cam.transform.position.y * (VerticalIntensity * OnePixelInUnits)) - VerticalOffset);
+            }
         }
 
     }
