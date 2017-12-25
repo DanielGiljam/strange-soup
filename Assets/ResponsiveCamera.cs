@@ -49,6 +49,8 @@ namespace Assets
             if (cs.FacingRight) tripleCOffset = CharacterCenterOffset;
             if (cs.FacingLeft) tripleCOffset = -CharacterCenterOffset;
 
+            if (character.transform.position.y < -9f) return;
+
             // upperBounds, lowerBounds -setup made by Albert Nyberg
             if (character.transform.position.y >= transform.position.y + UpperBounds)
             {

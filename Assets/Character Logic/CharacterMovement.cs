@@ -116,17 +116,15 @@ namespace Assets.Character_Logic
         }
 
 
-        void OnCollisionEnter2D()
+        void OnCollisionStay2D()
         {
             otherCollisions = true;
         }
 
-
-        void OnCollisionExit2D()
+        void OnCollision2DExit()
         {
             otherCollisions = false;
         }
-
 
         void FixedUpdate()
         {
