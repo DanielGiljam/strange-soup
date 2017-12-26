@@ -1,5 +1,4 @@
-﻿using Assets.Character_Logic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets
@@ -11,6 +10,10 @@ namespace Assets
         const string DegreeFormat = "0°";
         const float GravitationalAcceleration = -9.81f;
 
+
+        // VARIABLE INITIALIZATIONS
+
+
         // NOTE! Set in Inspector!
         public Text VelocityText;
         public Text AccelerationText;
@@ -18,35 +21,49 @@ namespace Assets
         public Text ForceText;
         public Text FrictionForceText;
 
-        Rigidbody2D rb;
+        Rigidbody2D rb; // reference to the character's Rigidbody -component
 
+        // variables for the different physical (mechanic) properties calculated in this script
         float velocity;
         float acceleration;
         float hOffsetAngle;
         float force;
         float frictionForce;
 
+        // variables for calculating delta- velocity and position
         float previousVelocity;
-
         Vector2 currentPosition;
         Vector2 previousPosition;
-        float a;
-        float b;
 
+        // variables for streamlining the code (making it nicer to read)
+        float adjacent;
+        float opposite;
+
+        // variables for other properties needed to calculate the properties that the HUD displays
         float mass;
         float gravity;
-        float frictionAmount;
+        float frictionCoefficient;
 
         /* Alternative way of counting acceleration:
                 readonly float[] previousVelocityContainer = new float[50];
                 int previousVelocityIterator = 0;
         */
 
+
+        // "UNITY FUNCTIONS"
+
+
         void Awake()
         {
+
+            // just fetching the corresponding components...
             rb = GetComponent<Rigidbody2D>();
+
+            // setting 0 values to avoid nulls
             velocity = 0;
-            frictionAmount = 0;
+            currentPosition = Vector2.zero;
+            frictionCoefficient = 0;
+
             /*
                 for (var i = 0; i < 50; i++)
                 {
@@ -58,42 +75,54 @@ namespace Assets
 
         void OnCollisionEnter2D(Collision2D collision)
         {
-            frictionAmount = Mathf.Sqrt(collision.collider.friction * collision.otherCollider.friction);
+
+            frictionCoefficient = Mathf.Sqrt(collision.collider.friction * collision.otherCollider.friction); // calculating the friction coefficient between the materials in contact with each other
+
         }
 
         void OnCollisionExit2D()
         {
-            frictionAmount = 0;
+
+            frictionCoefficient = 0; // not accounting for fluid friction, always assuming that the character's Rigidbody has linear drag set to zero
+
         }
 	
         void FixedUpdate()
         {
 
-            previousVelocity = velocity;
+            previousVelocity = velocity; // previous/initial current velocity is stored as previous velocity
 
+            // the position -variables use the same strategy as the velocity -variables
             previousPosition = currentPosition;
             currentPosition = transform.position;
-            a = currentPosition.x - previousPosition.x;
-            b = currentPosition.y - previousPosition.y;
 
+            // represent the adjacent and opposite sides of a right triangle and are later used to calculate the angle of the character's motion
+            adjacent = currentPosition.x - previousPosition.x;
+            opposite = currentPosition.y - previousPosition.y;
+
+            // refreshing other properties needed in calculating the HUD data
             mass = rb.mass;
             gravity = rb.gravityScale * GravitationalAcceleration;
 
+            // calculating velocity
             velocity = Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.y, 2));
-            acceleration = (velocity - previousVelocity) * 50;
-            if (Mathf.Abs(a) > 0 && Mathf.Abs(b) > 0) hOffsetAngle = Mathf.Atan(b / a) * Mathf.Rad2Deg;
+            // calculating acceleration. The multiplier converts the result from units per fixed timestep to units per seconds (check out Project Settings --> Time in Unity)
+            acceleration = (velocity - previousVelocity) * (1 / Time.fixedDeltaTime);
+            // calculating the angle of the character's motion (range -90 to 90 degrees) using the inverse tangent function. If/else -statement implemented to prevent calculating with zero (especially if adjacent is zero)
+            if (Mathf.Abs(adjacent) > 0 && Mathf.Abs(opposite) > 0) hOffsetAngle = Mathf.Atan(opposite / adjacent) * Mathf.Rad2Deg;
             else hOffsetAngle = 0;
+            // calculating the force and friction force. If/else -statement implemented in order to display the friction force as zero when the character isn't moving. Friction force made positive as the name already communicates the direction of the force.
             if (velocity > 0)
             {
-                frictionForce = -(mass * gravity * frictionAmount);
+                frictionForce = -(mass * gravity * frictionCoefficient);
                 force = (mass * acceleration) + frictionForce;
             }
             else
             {
                 frictionForce = 0;
-                force = mass * acceleration;
+                force = (mass * acceleration) + frictionForce;
             }
-            
+
             /*
                 previousVelocityContainer[previousVelocityIterator] = velocity;
                 previousVelocityIterator++;
@@ -106,6 +135,7 @@ namespace Assets
         void Update()
         {
 
+            // refreshing the values that the HUD displays
             VelocityText.text = velocity.ToString(NumFormat);
             AccelerationText.text = acceleration.ToString(NumFormat);
             HorizontalOffsetAngleText.text = hOffsetAngle.ToString(DegreeFormat);

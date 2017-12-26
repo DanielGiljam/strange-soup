@@ -1,29 +1,37 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using Assets.Character_Animations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Assets.Character_Logic
 {
-    public class CharacterState : MonoBehaviour
+    public class CharacterState
     {
 
         // VARIABLE INITIALIZATIONS
 
-        
-        CharacterMovement cm; // reference to the character's CharacterMovement -component
 
-        // corresponding gdrPoints relative to the character's position. Updated every time Unity's physics engine updates
-        Vector2 pointA;
-        Vector2 pointB;
+        readonly GameObject ch; // reference to the character
+        readonly CharacterMovement cm; // reference to the character's CharacterMovement -component
+        readonly AnimationControllerScript acs; // instance of the AnimationControllerState class
 
 
-        // "UNITY FUNCTIONS"
+        Vector2 pointA; // corresponding gdrPoint relative to the character's position. Updated every time Unity's physics engine updates
+        Vector2 pointB; // corresponding gdrPoint relative to the character's position. Updated every time Unity's physics engine updates
 
 
-        void Awake()
+        // CONSTRUCTOR
+
+
+        public CharacterState(GameObject character)
         {
 
-            // just fetching the corresponding components...
-            cm = GetComponent<CharacterMovement>();
+            // just fetching the corresponding components and gameobjects...
+            ch = character;
+            cm = ch.GetComponent<CharacterMovement>();
+            acs = new AnimationControllerScript(character);
 
         }
 
@@ -179,18 +187,18 @@ namespace Assets.Character_Logic
         // CHARACTER STATE FUNCTIONS
 
 
-        public void CharacterMovementState(Vector2 currentVelocity)
+        public void CharacterMovementState()
         {
-
-            pointA = Vector2Addition(transform.position, cm.GdrPointA);
-            pointB = Vector2Addition(transform.position, cm.GdrPointB);
+            
+            pointA = Vector2Addition(ch.transform.position, cm.GdrPointA);
+            pointB = Vector2Addition(ch.transform.position, cm.GdrPointB);
 
             SetGroundContact = Physics2D.OverlapArea(pointA, pointB, cm.LayerMask);
 
-            if (GroundContact && !(Math.Abs(currentVelocity.x) > 0)) SetIdle = true;
+            if (GroundContact && !(Math.Abs(cm.CurrentVelocity.x) > 0)) SetIdle = true;
             else SetIdle = false;
 
-            if (GroundContact && Math.Abs(currentVelocity.x) > cm.MovementSpeed * cm.MovementThreshold) SetIfMoving = true;
+            if (GroundContact && Math.Abs(cm.CurrentVelocity.x) > cm.MovementSpeed * cm.MovementThreshold) SetIfMoving = true;
             else SetIfMoving = false;
 
             if (IsMoving && cm.SprintInputValue > 0) SetIfSprinting = true;
@@ -202,8 +210,10 @@ namespace Assets.Character_Logic
             if (GroundContact && cm.JumpInputValue > 0) SetIfJumping = true;
             if (IsJumping && GroundContact) SetIfJumping = false;
 
-            if (currentVelocity.x > 0) SetFacingDirection = "right";
-            else if (currentVelocity.x < 0) SetFacingDirection = "left";
+            if (cm.CurrentVelocity.x > 0) SetFacingDirection = "right";
+            else if (cm.CurrentVelocity.x < 0) SetFacingDirection = "left";
+
+            acs.UpdateAnimations(FacingRight, FacingLeft, IsMoving, IsSprinting, IsSliding, IsJumping, GroundContact, Idle, cm.ActualSprintMultiplier);
 
         }
 

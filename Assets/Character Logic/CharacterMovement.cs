@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 namespace Assets.Character_Logic
@@ -26,7 +25,7 @@ namespace Assets.Character_Logic
         public LayerMask LayerMask; // choose "Ground Colliders" for the Physics2D.OverlapArea -function to only detect colliders that have been set to that specific layer
 
         Rigidbody2D rb; // reference to the character's Rigidbody -component
-        CharacterState cs; // reference to the character's CharacterStateCommunication -component
+        public CharacterState Cs; // instance of the CharacterState class
 
         Rect groundDetectionRect = Rect.zero; // rectangle object that defines the area used by the Physics2D.OverlapArea -function and that contains the data needed to draw a "gizmo" in Unity's scene view for visualization purposes
         RectToLines rtl; // a custom object that breaks down a Rect object into dots and provides a function for drawing the outlines of that Rect object using the Gizmos.DrawLine -function
@@ -62,7 +61,8 @@ namespace Assets.Character_Logic
         } // "Jump" (default)
 
         // variables updated every time Unity's physics engine updates
-        Vector2 currentVelocity; // self-explanatory (using rb.velocity's get method)
+        [HideInInspector]
+        public Vector2 CurrentVelocity; // self-explanatory (using rb.velocity's get method)
         float gravityScale; // self-explanatory (using rb.gravityScale's get method)
         float sprintJumpEffect; // decreases when sprinting, which in turn causes the character to jump higher, as sprintJumpEffect divides actualJumpForce before it's added as a positive Y force to the "rb"
         bool jumpReset; // regulates that AddForce only happens one time when jumping
@@ -71,6 +71,8 @@ namespace Assets.Character_Logic
 
         [HideInInspector]
         public bool sliding; // responsible for managing both sliding state and functionality
+        [HideInInspector]
+        public bool dead; // responsible for stopping all character logic once character is dead
 
 
         // "UNITY FUNCTIONS"
@@ -93,9 +95,9 @@ namespace Assets.Character_Logic
         void Awake()
         {
 
-            // just fetching the corresponding components...
+            // just fetching the corresponding components/objects...
             rb = GetComponent<Rigidbody2D>();
-            cs = GetComponent<CharacterState>();
+            Cs = new CharacterState(gameObject);
 
             // sizing and positioning the "gdr"
             groundDetectionRect.size = GroundDetectionRectSize * OnePixelInUnits;
@@ -129,12 +131,14 @@ namespace Assets.Character_Logic
         void FixedUpdate()
         {
 
+            if (dead) return;
+
             // updating current velocity and gravity scale in its own variable, as it is used a lot
-            currentVelocity = rb.velocity;
+            CurrentVelocity = rb.velocity;
             gravityScale = rb.gravityScale;
 
             // updating states
-            cs.CharacterMovementState(currentVelocity);
+            Cs.CharacterMovementState();
 
             // character movement functions
             HorizontalMovement();
@@ -150,22 +154,22 @@ namespace Assets.Character_Logic
         void HorizontalMovement()
         {
 
-            if (SprintInputValue > 0 && cs.IsMoving)
+            if (SprintInputValue > 0 && Cs.IsMoving)
             {
                 if (sprintJumpEffect > sprintJumpEffectInitial * (1 - SprintJumpEffectAmount)) sprintJumpEffect -= (float)actualJumpForce / SprintJumpEffectChargeTime;
                 ActualSprintMultiplier = (1 - ((sprintJumpEffect - (sprintJumpEffectInitial * (1 - SprintJumpEffectAmount))) / (sprintJumpEffectInitial * SprintJumpEffectAmount))) *
                                          SprintMultiplier;
             }
-            else if (cs.GroundContact)
+            else if (Cs.GroundContact)
             {
                 sprintJumpEffect = sprintJumpEffectInitial;
                 ActualSprintMultiplier = 0;
             }
 
-            if (otherCollisions && !cs.GroundContact) return;
+            if (otherCollisions && !Cs.GroundContact) return;
             if (sliding) return;
 
-            rb.velocity = new Vector2(HorizontalInputValue * MovementSpeed * (ActualSprintMultiplier + 1), currentVelocity.y);
+            rb.velocity = new Vector2(HorizontalInputValue * MovementSpeed * (ActualSprintMultiplier + 1), CurrentVelocity.y);
 
         }
 
@@ -174,16 +178,16 @@ namespace Assets.Character_Logic
         {
             if (!slideReset)
             {
-                if (SlideInputValue < -0.5f && cs.IsMoving)
+                if (SlideInputValue < -0.5f && Cs.IsMoving)
                 {
                     sliding = true;
                 }
-                else if (!(Mathf.Abs(currentVelocity.x) > 0))
+                else if (!(Mathf.Abs(CurrentVelocity.x) > 0))
                 {
                     slideReset = true;
                 }
             }
-            if (SlideInputValue > -0.5f || !cs.GroundContact)
+            if (SlideInputValue > -0.5f || !Cs.GroundContact)
             {
                 sliding = false;
                 slideReset = false;
@@ -194,31 +198,40 @@ namespace Assets.Character_Logic
         void Jump()
         {
 
-            if (cs.GroundContact && JumpInputValue > 0.5f && !jumpReset)
+            if (Cs.GroundContact && JumpInputValue > 0.5f && !jumpReset)
             {
                 rb.AddForce(new Vector2(0, actualActualJumpForce / sprintJumpEffect));
                 jumpReset = true;
             }
-            else if (!cs.GroundContact || JumpInputValue < 0.5f)
+            else if (!Cs.GroundContact || JumpInputValue < 0.5f)
             {
                 jumpReset = false;
             }
 
             // following code snippet inspired by YouTuber Board to Bits Games video on how to improve jumping in Unity
-            if (currentVelocity.y < 0)
+            if (CurrentVelocity.y < 0)
             {
                 rb.velocity += Vector2.up * ((3 * Physics2D.gravity.y) / 50) * gravityScale;
             }
-            if (currentVelocity.y > 0 && JumpInputValue < 0.5f)
+            if (CurrentVelocity.y > 0 && JumpInputValue < 0.5f)
             {
                 rb.velocity += Vector2.up * ((2 * Physics2D.gravity.y) / 50) * gravityScale;
             }
-            else if (currentVelocity.y > 0)
+            else if (CurrentVelocity.y > 0)
             {
                 rb.velocity += Vector2.up * ((1 * Physics2D.gravity.y) / 50) * gravityScale;
             }
                 
         }
+
+
+        // SAD FUNCTIONS
+
+        void KillCharacter()
+        {
+            
+        }
+
 
 
         // MISCELLANEOUS
@@ -236,6 +249,8 @@ namespace Assets.Character_Logic
 
         public class RectToLines {
 
+            // VARIABLE INITIALIZATIONS
+
             public readonly Vector2 TopLineFrom;
             public readonly Vector2 TopLineTo;
 
@@ -247,6 +262,8 @@ namespace Assets.Character_Logic
 
             public readonly Vector2 LeftLineFrom;
             public readonly Vector2 LeftLineTo;
+
+            // CONSTRUCTOR
 
             public RectToLines(Rect rect)
             {
@@ -262,6 +279,8 @@ namespace Assets.Character_Logic
                 LeftLineFrom = new Vector3(rect.xMin, rect.yMax, 0);
                 LeftLineTo = new Vector3(rect.xMin, rect.yMin, 0);
             }
+
+            // FUNCTIONS
 
             public void DrawGizmoRect(Vector2 currentPosition)
             {

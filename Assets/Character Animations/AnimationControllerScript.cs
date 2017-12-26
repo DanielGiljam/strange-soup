@@ -1,32 +1,32 @@
-﻿using Assets.Character_Logic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Character_Animations
 {
-    public class AnimationControllerScript : MonoBehaviour
+    public class AnimationControllerScript
     {
 
-        Animator animator;
-        CharacterMovement cm;
-        CharacterState cs;
+        // VARIABLE INITIALIZATIONS
+        readonly Animator animator;
 
-        void Awake()
+        // CONSTRUCTOR
+        public AnimationControllerScript(GameObject character)
         {
-            animator = GetComponent<Animator>();
-            cm = GetComponent<CharacterMovement>();
-            cs = GetComponent<CharacterState>();
+            // just fetching the corresponding components...
+            animator = character.GetComponent<Animator>();
         }
 	
-        void Update() {
-		    animator.SetBool("FacingRight", cs.FacingRight);
-            animator.SetBool("FacingLeft", cs.FacingLeft);
-            animator.SetBool("IsMoving", cs.IsMoving);
-            animator.SetBool("IsSprinting", cs.IsSprinting);
-            animator.SetBool("IsSliding", cs.IsSliding);
-            animator.SetBool("IsJumping", cs.IsJumping);
-            animator.SetBool("GroundContact", cs.GroundContact);
-            animator.SetBool("Idle", cs.Idle);
-            animator.speed = cm.ActualSprintMultiplier + 1;
+        // MAIN CONTENT
+        public void UpdateAnimations(bool facingRight, bool facingLeft, bool isMoving, bool isSprinting, bool isSliding, bool isJumping, bool groundContact, bool idle, float actualSprintMultiplier) {
+            // updating all the conditions that the animation state transitions rely upon...
+		    animator.SetBool("FacingRight", facingRight);
+            animator.SetBool("FacingLeft", facingLeft);
+            animator.SetBool("IsMoving", isMoving);
+            animator.SetBool("IsSprinting", isSprinting);
+            animator.SetBool("IsSliding", isSliding);
+            animator.SetBool("IsJumping", isJumping);
+            animator.SetBool("GroundContact", groundContact);
+            animator.SetBool("Idle", idle);
+            animator.speed = actualSprintMultiplier + 1;
         }
 
     }
