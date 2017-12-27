@@ -13,10 +13,14 @@ namespace Assets.Character_Logic
 
         // Set in inspector!
         public GameObject YouFellIntoTheVoid; // reference to the "game over" text
-        
+        public GameObject ThisOtherRandomText; // reference to this other random text...
+
         GameObject hud; // reference to the HUD gameobject
         CharacterMovement cm; // reference to the CharacterMovement -component
+        SpriteRenderer sr; // reference to the SpriteRenderer -component
 
+        bool veryDeadNow; // prevents Update() from happening after death
+        
         // "UNITY FUNCTIONS"
 
         void Awake()
@@ -25,19 +29,27 @@ namespace Assets.Character_Logic
             // just fetching the corresponding components and gameobjects...
             hud = GameObject.Find("HUD");
             cm = GetComponent<CharacterMovement>();
+            sr = GetComponent<SpriteRenderer>();
 
         }
 	
-        void Update() {
+        void Update()
+        {
 
-            if (!(transform.position.y < voidBarrier)) return; // nothing happens unless character is below the "void barrier"
+            if (veryDeadNow) return;
+            if (!(transform.position.y < voidBarrier) && !(transform.position.x > 50f && cm.Cs.GroundContact)) return; // nothing happens unless character is below the "void barrier" or this other random condition...
+
+            veryDeadNow = true;
 
             hud.SetActive(false); // if character is below the "void barrier" HUD is disabled...
-            YouFellIntoTheVoid.SetActive(true); // ...and death text is displayed
+            if (!(transform.position.x > 50f)) YouFellIntoTheVoid.SetActive(true); // ...and death text is displayed
+            else ThisOtherRandomText.SetActive(true);
 
             Invoke("Restart", RestartDelay); // reloading scene after specified time
 
             cm.dead = true; // setting this to true interrupts all interaction with the character, which from certain a philosphical viewpoint could be seen as what truly kills the character :'(
+
+            if (transform.position.x > 50f) sr.enabled = !sr.enabled;
 
         }
 

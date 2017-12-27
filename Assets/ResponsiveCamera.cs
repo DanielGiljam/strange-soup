@@ -18,16 +18,20 @@ namespace Assets
         // how far from the center the character will be, in the opposite direction of which the character is facing
         public float CharacterCenterOffset = 3.2f;
 
+        // how much below y-axis camera is allowed to go
+        public float maxCameraY = 5f;
+
         // following variables have to do with the sizing of the camera in the Awake -method and following the character in the Update -method
         Vector2 optimalAspectRatio = new Vector2(17, 10);
         Vector2 screenAspectRatio;
         Camera cam;
         GameObject character;
         CharacterMovement cm;
-        CharacterDeath cd;
         float optimalArFloat;
         float screenArFloat;
         float tripleCOffset;
+        float actualUpperBounds;
+        float actualLowerBounds;
 	
         // "UNITY FUNCTIONS"
 
@@ -38,7 +42,6 @@ namespace Assets
             cam = GetComponent<Camera>();
             character = GameObject.Find("Character");
             cm = character.GetComponent<CharacterMovement>();
-            cd = character.GetComponent<CharacterDeath>();
             screenAspectRatio = new Vector2(Screen.width, Screen.height);
 
             // determining and setting camera size
@@ -64,17 +67,31 @@ namespace Assets
             if (cm.Cs.FacingRight) tripleCOffset = CharacterCenterOffset;
             if (cm.Cs.FacingLeft) tripleCOffset = -CharacterCenterOffset;
 
+            // refershing "bounds" based on character position
+            if (character.transform.position.x > 0)
+            {
+                actualUpperBounds = UpperBounds + (character.transform.position.x / 10);
+                actualLowerBounds = LowerBounds;
+            }
+            else
+            {
+                actualUpperBounds = UpperBounds;
+                actualLowerBounds = LowerBounds;
+            }
+            if (character.transform.position.x > 40) actualLowerBounds = LowerBounds / 10;
+           
+
             // if -statement prevents camera from following the character into the void
-            if (character.transform.position.y < cd.voidBarrier) return;
+            if (transform.position.y < -maxCameraY) return;
 
             // upperBounds, lowerBounds -setup made by Albert Nyberg
-            if (character.transform.position.y >= transform.position.y + UpperBounds)
+            if (character.transform.position.y >= transform.position.y + actualUpperBounds)
             {
-                transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, character.transform.position.y - UpperBounds, -10), CameraFollowSmoothing);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, character.transform.position.y - actualUpperBounds, -10), CameraFollowSmoothing);
             }
-            else if (character.transform.position.y <= transform.position.y - LowerBounds)
+            else if (character.transform.position.y <= transform.position.y - actualLowerBounds)
             {
-                transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, character.transform.position.y + LowerBounds, -10), CameraFollowSmoothing);
+                transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, character.transform.position.y + actualLowerBounds, -10), CameraFollowSmoothing);
             }
             else
             {

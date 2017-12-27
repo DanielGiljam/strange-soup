@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: d7944a2b20ccc6a4e833496aeaddfaaf
-timeCreated: 1513440366
+timeCreated: 1514385207
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -48,6 +48,7 @@ TextureImporter:
     21300082: left-corner-steep-up-subsurface
     21300084: right-corner-steep-up-subsurface
     21300086: solitary-steep-up-subsurface
+    21300088: the-great-new-sprite
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -751,6 +752,20 @@ TextureImporter:
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: the-great-new-sprite
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 55
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

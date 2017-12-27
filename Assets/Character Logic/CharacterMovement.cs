@@ -25,6 +25,7 @@ namespace Assets.Character_Logic
         public LayerMask LayerMask; // choose "Ground Colliders" for the Physics2D.OverlapArea -function to only detect colliders that have been set to that specific layer
 
         Rigidbody2D rb; // reference to the character's Rigidbody -component
+        BoxCollider2D bc; // reference to the character's BoxCollider -component
         public CharacterState Cs; // instance of the CharacterState class
 
         Rect groundDetectionRect = Rect.zero; // rectangle object that defines the area used by the Physics2D.OverlapArea -function and that contains the data needed to draw a "gizmo" in Unity's scene view for visualization purposes
@@ -97,6 +98,7 @@ namespace Assets.Character_Logic
 
             // just fetching the corresponding components/objects...
             rb = GetComponent<Rigidbody2D>();
+            bc = GetComponent<BoxCollider2D>();
             Cs = new CharacterState(gameObject);
 
             // sizing and positioning the "gdr"
@@ -181,6 +183,8 @@ namespace Assets.Character_Logic
                 if (SlideInputValue < -0.5f && Cs.IsMoving)
                 {
                     sliding = true;
+                    bc.size = new Vector2(bc.size.x, 1f);
+                    bc.offset = new Vector2(bc.offset.x, -0.75f);
                 }
                 else if (!(Mathf.Abs(CurrentVelocity.x) > 0))
                 {
@@ -190,6 +194,8 @@ namespace Assets.Character_Logic
             if (SlideInputValue > -0.5f || !Cs.GroundContact)
             {
                 sliding = false;
+                bc.size = new Vector2(bc.size.x, 2.5f);
+                bc.offset = new Vector2(bc.offset.x, 0);
                 slideReset = false;
             }
         }
@@ -223,15 +229,6 @@ namespace Assets.Character_Logic
             }
                 
         }
-
-
-        // SAD FUNCTIONS
-
-        void KillCharacter()
-        {
-            
-        }
-
 
 
         // MISCELLANEOUS
