@@ -19,19 +19,21 @@ namespace Assets
         public float CharacterCenterOffset = 3.2f;
 
         // how much below y-axis camera is allowed to go
-        public float maxCameraY = 5f;
-
+        public float MaxCameraY = 5f;
+        
         // following variables have to do with the sizing of the camera in the Awake -method and following the character in the Update -method
         Vector2 optimalAspectRatio = new Vector2(17, 10);
         Vector2 screenAspectRatio;
         Camera cam;
         GameObject character;
+        GameObject gameWorldBorderObject;
         CharacterMovement cm;
         float optimalArFloat;
         float screenArFloat;
         float tripleCOffset;
         float actualUpperBounds;
         float actualLowerBounds;
+        float gameWorldBorder;
 	
         // "UNITY FUNCTIONS"
 
@@ -41,6 +43,7 @@ namespace Assets
             // just fetching the corresponding components/values...
             cam = GetComponent<Camera>();
             character = GameObject.Find("Character");
+            gameWorldBorderObject = GameObject.Find("Game World Border");
             cm = character.GetComponent<CharacterMovement>();
             screenAspectRatio = new Vector2(Screen.width, Screen.height);
 
@@ -57,6 +60,9 @@ namespace Assets
             }
 
             Debug.Log("Screen width: " + Screen.width + ", Screen height: " + Screen.height + "\nScreen aspect ratio: " + screenArFloat + ", Optimal aspect ratio: " + optimalArFloat);
+
+            // determining game world border
+            gameWorldBorder = gameWorldBorderObject.transform.position.x + (gameWorldBorderObject.transform.lossyScale.x / 2) + (cam.orthographicSize * screenArFloat);
 
         }
 
@@ -80,9 +86,14 @@ namespace Assets
             }
             if (character.transform.position.x > 40) actualLowerBounds = LowerBounds / 10;
            
-
             // if -statement prevents camera from following the character into the void
-            if (transform.position.y < -maxCameraY) return;
+            if (transform.position.y < -MaxCameraY) return;
+
+            // if -statement prevents camera from crossing the game world border
+            if (transform.position.x < gameWorldBorder)
+            {
+                if (!(character.transform.position.x > gameWorldBorder + CharacterCenterOffset)) return;
+            }
 
             // upperBounds, lowerBounds -setup made by Albert Nyberg
             if (character.transform.position.y >= transform.position.y + actualUpperBounds)
@@ -96,7 +107,7 @@ namespace Assets
             else
             {
                 transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, transform.position.y, -10), CameraFollowSmoothing);
-            }
+            }            
 
         }
 

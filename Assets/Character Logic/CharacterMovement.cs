@@ -68,7 +68,7 @@ namespace Assets.Character_Logic
         float sprintJumpEffect; // decreases when sprinting, which in turn causes the character to jump higher, as sprintJumpEffect divides actualJumpForce before it's added as a positive Y force to the "rb"
         bool jumpReset; // regulates that AddForce only happens one time when jumping
         bool slideReset; // regulates sliding similarly to how jumpReset regulates jumping
-        bool otherCollisions; // fixes a "stuck to a wall" issue by not allowing players to run into objects they have already collided with 
+        bool otherCollisions; // fixes a "stuck to a wall" issue by not allowing players to run into objects they have already collided with
 
         [HideInInspector]
         public bool sliding; // responsible for managing both sliding state and functionality
@@ -122,7 +122,7 @@ namespace Assets.Character_Logic
 
         void OnCollisionStay2D()
         {
-            otherCollisions = true;
+            otherCollisions = true;     
         }
 
         void OnCollision2DExit()
@@ -169,7 +169,7 @@ namespace Assets.Character_Logic
             }
 
             if (otherCollisions && !Cs.GroundContact) return;
-            if (sliding) return;
+            if (sliding) return;  
 
             rb.velocity = new Vector2(HorizontalInputValue * MovementSpeed * (ActualSprintMultiplier + 1), CurrentVelocity.y);
 

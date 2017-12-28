@@ -17,6 +17,7 @@ namespace Assets
         GameObject character;
         AudioSource we2Sound;
 
+        SpriteRenderer chSprite;
         SpriteRenderer[] dpSprites;
         SpriteRenderer[] udpSprites;
         SpriteRenderer[] bgSprites;
@@ -29,6 +30,7 @@ namespace Assets
         Color thatBackgroundColor;
 
         readonly Color black = new Color(0, 0, 0, 0);
+        readonly Color solidBlack = new Color(0, 0, 0, 255);
         readonly Color white = new Color(255, 255, 255, 255);
 
         bool eventTriggered;
@@ -42,6 +44,7 @@ namespace Assets
             character = GameObject.Find("Character");
             we2Sound = GetComponent<AudioSource>();
 
+            chSprite = character.GetComponent<SpriteRenderer>();
             dpSprites = DoublePlatform.GetComponentsInChildren<SpriteRenderer>();
             udpSprites = UpsideDownPlatform.GetComponentsInChildren<SpriteRenderer>();
             bgSprites = Background.GetComponentsInChildren<SpriteRenderer>();
@@ -72,8 +75,10 @@ namespace Assets
 
             we2Sound.Play();
 
+            chSprite.color = white;
+
             thatBackgroundColor = cam.backgroundColor;
-            cam.backgroundColor = white;
+            cam.backgroundColor = solidBlack;
 
             foreach (var spriteRenderer in dpSprites)
             {                
@@ -102,6 +107,8 @@ namespace Assets
             if (!(character.transform.position.x > -28f)) return; // nothing happens unless conditions are met
 
             eventTriggered = false;
+
+            chSprite.color = solidBlack;
 
             cam.backgroundColor = thatBackgroundColor;
 
