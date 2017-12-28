@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Sound;
+using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Assets
 {
@@ -12,10 +14,15 @@ namespace Assets
         public GameObject UpsideDownPlatform;
         public GameObject Background;
         public GameObject ParallaxLayer;
+        public AudioSource We2Sound1;
+        public AudioSource We2Sound2;
+        public AudioMixerGroup Clean;
+        public AudioMixerGroup Affected;
 
         Camera cam;
+        CharacterSounds chSounds;
         GameObject character;
-        AudioSource we2Sound;
+        
 
         SpriteRenderer chSprite;
         SpriteRenderer[] dpSprites;
@@ -45,9 +52,9 @@ namespace Assets
 
             // just fetching the corresponding gameobjects/components...
             cam = Camera.main.GetComponent<Camera>();
+            chSounds = GameObject.Find("Sounds").GetComponent<CharacterSounds>();
             character = GameObject.Find("Character");
             bgNoSky = GameObject.Find("parallax-mountain-bg-no-sky").GetComponent<SpriteRenderer>();
-            we2Sound = GetComponent<AudioSource>();
 
             chSprite = character.GetComponent<SpriteRenderer>();
             dpSprites = DoublePlatform.GetComponentsInChildren<SpriteRenderer>();
@@ -80,14 +87,15 @@ namespace Assets
         // EVENT FUNCTIONS
 
         void Enter()
-        {
+        {            
 
             if (eventTriggered) return;
             if (!(character.transform.position.x < -30f)) return; // nothing happens unless conditions are met
 
             eventTriggered = true;
 
-            we2Sound.Play();
+            We2Sound1.Stop();
+            We2Sound2.Play();
 
             chSprite.color = white;
 
@@ -112,6 +120,10 @@ namespace Assets
             foreach (var spriteRenderer in bgSprites) spriteRenderer.color = black;
             foreach (var spriteRenderer in plSprites) spriteRenderer.color = black;
 
+            chSounds.AudioSources[0].outputAudioMixerGroup = Affected;
+            chSounds.AudioSources[1].outputAudioMixerGroup = Affected;
+            chSounds.AudioSources[2].outputAudioMixerGroup = Affected;
+
         }
 
         void Exit()
@@ -121,6 +133,8 @@ namespace Assets
             if (!(character.transform.position.x > -28f)) return; // nothing happens unless conditions are met
 
             eventTriggered = false;
+
+            We2Sound1.Play();
 
             chSprite.color = solidBlack;
 
@@ -141,6 +155,10 @@ namespace Assets
 
             foreach (var spriteRenderer in bgSprites) spriteRenderer.color = white;
             foreach (var spriteRenderer in plSprites) spriteRenderer.color = white;
+
+            chSounds.AudioSources[0].outputAudioMixerGroup = Clean;
+            chSounds.AudioSources[1].outputAudioMixerGroup = Clean;
+            chSounds.AudioSources[2].outputAudioMixerGroup = Clean;
 
         }
 
