@@ -73,6 +73,10 @@ namespace Assets
             if (cm.Cs.FacingRight) tripleCOffset = CharacterCenterOffset;
             if (cm.Cs.FacingLeft) tripleCOffset = -CharacterCenterOffset;
 
+            // special conditions for tripleCOffset if character is near the game world border
+            if (character.transform.position.x + tripleCOffset < gameWorldBorder)
+                tripleCOffset = gameWorldBorder - character.transform.position.x;
+
             // refershing "bounds" based on character position
             if (character.transform.position.x > 0)
             {
@@ -92,7 +96,7 @@ namespace Assets
             // if -statement prevents camera from crossing the game world border
             if (transform.position.x < gameWorldBorder)
             {
-                if (!(character.transform.position.x > gameWorldBorder + CharacterCenterOffset)) return;
+                if (!(character.transform.position.x > gameWorldBorder - CharacterCenterOffset)) return;
             }
 
             // upperBounds, lowerBounds -setup made by Albert Nyberg
@@ -107,7 +111,7 @@ namespace Assets
             else
             {
                 transform.position = Vector3.Lerp(transform.position, new Vector3(character.transform.position.x + tripleCOffset, transform.position.y, -10), CameraFollowSmoothing);
-            }            
+            }
 
         }
 

@@ -22,16 +22,20 @@ namespace Assets
         SpriteRenderer[] udpSprites;
         SpriteRenderer[] bgSprites;
         SpriteRenderer[] plSprites;
+        SpriteRenderer bgNoSky;
 
         Sprite[] dpOldSprites;
-        Sprite[] updOldSprites;
+        Sprite[] udpOldSprites;
         int oldSpriteIterator = 0;
+
+        float interpolationValue;
 
         Color thatBackgroundColor;
 
-        readonly Color black = new Color(0, 0, 0, 0);
-        readonly Color solidBlack = new Color(0, 0, 0, 255);
-        readonly Color white = new Color(255, 255, 255, 255);
+        readonly Color thatOtherBackgroundColor = new Color(171f / 255f, 106f / 255f, 140 / 255f);
+        readonly Color solidBlack = new Color(0, 0, 0);
+        readonly Color black = new Color(0, 0, 0, 0);        
+        readonly Color white = new Color(1f, 1f, 1f, 1f);
 
         bool eventTriggered;
 
@@ -42,6 +46,7 @@ namespace Assets
             // just fetching the corresponding gameobjects/components...
             cam = Camera.main.GetComponent<Camera>();
             character = GameObject.Find("Character");
+            bgNoSky = GameObject.Find("parallax-mountain-bg-no-sky").GetComponent<SpriteRenderer>();
             we2Sound = GetComponent<AudioSource>();
 
             chSprite = character.GetComponent<SpriteRenderer>();
@@ -51,7 +56,7 @@ namespace Assets
             plSprites = ParallaxLayer.GetComponentsInChildren<SpriteRenderer>();
 
             dpOldSprites = new Sprite[dpSprites.Length];
-            updOldSprites = new Sprite[udpSprites.Length];
+            udpOldSprites = new Sprite[udpSprites.Length];
 
         }
 	
@@ -60,6 +65,15 @@ namespace Assets
 
             Enter();
             Exit();
+
+            if (!eventTriggered) return;
+
+            interpolationValue = (cam.transform.position.x + 36.6f) / (-53.3f + 36.6f);
+            if (interpolationValue > 1) interpolationValue = 1;
+            if (interpolationValue < 0) interpolationValue = 0;
+
+            cam.backgroundColor = Color.Lerp(solidBlack, thatOtherBackgroundColor, interpolationValue);
+            bgNoSky.color = Color.Lerp(black, white, interpolationValue);
 
         }
 
@@ -89,7 +103,7 @@ namespace Assets
             oldSpriteIterator = 0;
             foreach (var spriteRenderer in udpSprites)
             {
-                updOldSprites[oldSpriteIterator] = spriteRenderer.sprite;
+                udpOldSprites[oldSpriteIterator] = spriteRenderer.sprite;
                 oldSpriteIterator++;
                 spriteRenderer.sprite = TheGreatNewSprite;
             }
@@ -120,7 +134,7 @@ namespace Assets
             oldSpriteIterator = 0;
             foreach (var spriteRenderer in udpSprites)
             {
-                spriteRenderer.sprite = updOldSprites[oldSpriteIterator];
+                spriteRenderer.sprite = udpOldSprites[oldSpriteIterator];
                 oldSpriteIterator++;
             }
             oldSpriteIterator = 0;
