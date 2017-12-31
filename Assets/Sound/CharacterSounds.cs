@@ -13,10 +13,14 @@ namespace Assets.Sound
         GameObject character;
         CharacterMovement cm;
 
-        bool alreadyRunning;
-        bool alreadySliding;
-        bool alreadyLanded;
-        bool alreadyDead;
+        [HideInInspector]
+        public bool alreadyRunning;
+        [HideInInspector]
+        public bool alreadySliding;
+        [HideInInspector]
+        public bool alreadyLanded;
+        [HideInInspector]
+        public bool alreadyDead;
 
         // "UNITY FUNCTIONS"
 

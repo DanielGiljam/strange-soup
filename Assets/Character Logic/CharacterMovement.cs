@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Menu;
 using UnityEngine;
 
 namespace Assets.Character_Logic
@@ -23,10 +24,11 @@ namespace Assets.Character_Logic
         public Vector2 GroundDetectionRectPosition = Vector2.zero; // center of the area used by the Physics2D.OverlapArea -function for detecting when the character is grounded. Only takes change in game after game has been restarted.
         public Vector2 GroundDetectionRectSize = new Vector2(1, 1); // width and height of the area used by the Physics2D.OverlapArea -function for detecting when the character is grounded. Only takes change in game after game has been restarted
         public LayerMask LayerMask; // choose "Ground Colliders" for the Physics2D.OverlapArea -function to only detect colliders that have been set to that specific layer
-
+        
         Rigidbody2D rb; // reference to the character's Rigidbody -component
         BoxCollider2D bc; // reference to the character's BoxCollider -component
         public CharacterState Cs; // instance of the CharacterState class
+        Fader loadingTextFader;
 
         Rect groundDetectionRect = Rect.zero; // rectangle object that defines the area used by the Physics2D.OverlapArea -function and that contains the data needed to draw a "gizmo" in Unity's scene view for visualization purposes
         RectToLines rtl; // a custom object that breaks down a Rect object into dots and provides a function for drawing the outlines of that Rect object using the Gizmos.DrawLine -function
@@ -100,6 +102,7 @@ namespace Assets.Character_Logic
             rb = GetComponent<Rigidbody2D>();
             bc = GetComponent<BoxCollider2D>();
             Cs = new CharacterState(gameObject);
+            loadingTextFader = GameObject.Find("Loading Text").GetComponent<Fader>();
 
             // sizing and positioning the "gdr"
             groundDetectionRect.size = GroundDetectionRectSize * OnePixelInUnits;
@@ -141,6 +144,8 @@ namespace Assets.Character_Logic
 
             // updating states
             Cs.CharacterMovementState();
+
+            if (loadingTextFader.MenuTransition) return;
 
             // character movement functions
             HorizontalMovement();

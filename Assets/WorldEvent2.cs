@@ -9,20 +9,22 @@ namespace Assets
         // VARIABLE INITIALIZATIONS
 
         // NOTE! Set these in inspector!
+        public GameObject Cso;
         public Sprite TheGreatNewSprite;
         public GameObject DoublePlatform;
         public GameObject UpsideDownPlatform;
         public GameObject Background;
         public GameObject ParallaxLayer;
-        public AudioSource We2Sound1;
-        public AudioSource We2Sound2;
         public AudioMixerGroup Clean;
         public AudioMixerGroup Affected;
 
         Camera cam;
-        CharacterSounds chSounds;
+        GameObject am;
         GameObject character;
-        
+        CharacterSounds chSounds;
+        AudioSource we2Sound;
+        AudioSource[] amSources;
+
 
         SpriteRenderer chSprite;
         SpriteRenderer[] dpSprites;
@@ -34,6 +36,9 @@ namespace Assets
         Sprite[] dpOldSprites;
         Sprite[] udpOldSprites;
         int oldSpriteIterator = 0;
+
+        float[] oldVolumes;
+        int oldVolumeIterator = 0;
 
         float interpolationValue;
 
@@ -52,18 +57,22 @@ namespace Assets
 
             // just fetching the corresponding gameobjects/components...
             cam = Camera.main.GetComponent<Camera>();
-            chSounds = GameObject.Find("Sounds").GetComponent<CharacterSounds>();
+            am = GameObject.Find("AudioManager");
             character = GameObject.Find("Character");
-            bgNoSky = GameObject.Find("parallax-mountain-bg-no-sky").GetComponent<SpriteRenderer>();
+            chSounds = Cso.GetComponent<CharacterSounds>();
+            we2Sound = GetComponent<AudioSource>();
+            amSources = am.GetComponentsInChildren<AudioSource>();
 
             chSprite = character.GetComponent<SpriteRenderer>();
             dpSprites = DoublePlatform.GetComponentsInChildren<SpriteRenderer>();
             udpSprites = UpsideDownPlatform.GetComponentsInChildren<SpriteRenderer>();
             bgSprites = Background.GetComponentsInChildren<SpriteRenderer>();
             plSprites = ParallaxLayer.GetComponentsInChildren<SpriteRenderer>();
+            bgNoSky = GameObject.Find("parallax-mountain-bg-no-sky").GetComponent<SpriteRenderer>();
 
             dpOldSprites = new Sprite[dpSprites.Length];
             udpOldSprites = new Sprite[udpSprites.Length];
+            oldVolumes = new float[amSources.Length];
 
         }
 	
@@ -75,12 +84,14 @@ namespace Assets
 
             if (!eventTriggered) return;
 
-            interpolationValue = (cam.transform.position.x + 36.6f) / (-53.3f + 36.6f);
+            interpolationValue = (character.transform.position.x + 40f) / (-59f + 40f);
             if (interpolationValue > 1) interpolationValue = 1;
             if (interpolationValue < 0) interpolationValue = 0;
 
             cam.backgroundColor = Color.Lerp(solidBlack, thatOtherBackgroundColor, interpolationValue);
             bgNoSky.color = Color.Lerp(black, white, interpolationValue);
+
+            amSources[0].volume = (oldVolumes[0] * interpolationValue) * 0.75f;
 
         }
 
@@ -94,8 +105,15 @@ namespace Assets
 
             eventTriggered = true;
 
-            We2Sound1.Stop();
-            We2Sound2.Play();
+            we2Sound.Play();
+
+            foreach (var audioSource in amSources)
+            {
+                oldVolumes[oldVolumeIterator] = audioSource.volume;
+                oldVolumeIterator++;
+                audioSource.volume = 0;
+            }
+            oldVolumeIterator = 0;
 
             chSprite.color = white;
 
@@ -134,7 +152,12 @@ namespace Assets
 
             eventTriggered = false;
 
-            We2Sound1.Play();
+            foreach (var audioSource in amSources)
+            {
+                audioSource.volume = oldVolumes[oldVolumeIterator];
+                oldVolumeIterator++;
+            }
+            oldVolumeIterator = 0;
 
             chSprite.color = solidBlack;
 

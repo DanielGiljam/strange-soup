@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Sound;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Character_Logic
@@ -8,15 +9,17 @@ namespace Assets.Character_Logic
 
         // VARIABLE INITIALIZATIONS
 
-        public float voidBarrier = -9f; // y-value below which player will die 
+        public float VoidBarrier = -9f; // y-value below which player will die 
         public float RestartDelay = 2f; // how many seconds the "game over" text will display
 
         // Set in inspector!
         public GameObject YouFellIntoTheVoid; // reference to the "game over" text
         public GameObject ThisOtherRandomText; // reference to this other random text...
+        public GameObject Hud;
+        public GameObject Cso;
 
-        GameObject hud; // reference to the HUD gameobject
         CharacterMovement cm; // reference to the CharacterMovement -component
+        CharacterSounds cs;
         SpriteRenderer sr; // reference to the SpriteRenderer -component
 
         bool veryDeadNow; // prevents Update() from happening after death
@@ -27,9 +30,11 @@ namespace Assets.Character_Logic
         {
 
             // just fetching the corresponding components and gameobjects...
-            hud = GameObject.Find("HUD");
             cm = GetComponent<CharacterMovement>();
+            cs = Cso.GetComponent<CharacterSounds>();
             sr = GetComponent<SpriteRenderer>();
+
+            CancelInvoke();
 
         }
 	
@@ -37,11 +42,11 @@ namespace Assets.Character_Logic
         {
 
             if (veryDeadNow) return;
-            if (!(transform.position.y < voidBarrier) && !(transform.position.x > 50f && cm.Cs.GroundContact)) return; // nothing happens unless character is below the "void barrier" or this other random condition...
+            if (!(transform.position.y < VoidBarrier) && !(transform.position.x > 50f && cm.Cs.GroundContact)) return; // nothing happens unless character is below the "void barrier" or this other random condition...
 
             veryDeadNow = true;
 
-            hud.SetActive(false); // if character is below the "void barrier" HUD is disabled...
+            Hud.SetActive(false); // if character is below the "void barrier" HUD is disabled...
             if (!(transform.position.x > 50f)) YouFellIntoTheVoid.SetActive(true); // ...and death text is displayed
             else ThisOtherRandomText.SetActive(true);
 
@@ -49,8 +54,12 @@ namespace Assets.Character_Logic
 
             cm.dead = true; // setting this to true interrupts all interaction with the character, which from certain a philosphical viewpoint could be seen as what truly kills the character :'(
 
-            if (transform.position.x > 50f) sr.enabled = !sr.enabled;
-
+            if (!(transform.position.x > 50f)) return;
+            cm.enabled = !cs.enabled;
+            cs.AudioSources[0].Stop();
+            cs.AudioSources[1].Stop();
+            cs.enabled = !cs.enabled;
+            sr.enabled = !sr.enabled;
         }
 
         // MISCELLANEOUS
